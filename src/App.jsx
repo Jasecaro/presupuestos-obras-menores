@@ -230,6 +230,25 @@ export default function App() {
     }
   };
 
+  const handleRestoreFullBackup = (backup) => {
+    if (backup.savedBudgets) {
+      localStorage.setItem('pom_saved_budgets_list', JSON.stringify(backup.savedBudgets));
+      setSavedBudgets(backup.savedBudgets);
+    }
+    if (backup.contractorProfile) {
+      saveContractorProfile(backup.contractorProfile);
+      setContractor(backup.contractorProfile);
+    }
+    if (backup.priceCatalog) {
+      savePriceCatalog(backup.priceCatalog);
+      setPriceCatalog(backup.priceCatalog);
+    }
+    if (backup.currentBudget) {
+      handleLoadBudget(backup.currentBudget);
+    }
+    alert('¡Respaldo importado y restaurado con éxito!');
+  };
+
   const handleSaveContractor = (updatedProfile) => {
     saveContractorProfile(updatedProfile);
     setContractor(updatedProfile);
@@ -328,8 +347,10 @@ export default function App() {
       {showSavedModal && (
         <SavedBudgetsModal
           budgets={savedBudgets}
+          currentBudget={currentBudgetData}
           onLoadBudget={handleLoadBudget}
           onDeleteBudget={handleDeleteBudget}
+          onRestoreFullBackup={handleRestoreFullBackup}
           onClose={() => setShowSavedModal(false)}
         />
       )}

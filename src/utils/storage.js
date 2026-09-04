@@ -177,3 +177,58 @@ export function deleteBudgetFromHistory(id) {
     return [];
   }
 }
+
+/**
+ * Exports a single budget as a downloadable .json file
+ */
+export function exportBudgetToJson(budget) {
+  try {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(budget, null, 2));
+    const downloadAnchor = document.createElement('a');
+    const clientName = (budget.client?.name || 'Cliente').replace(/\s+/g, '_');
+    const quoteNum = budget.client?.quoteNumber || 'PTO-000';
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `Presupuesto_${quoteNum}_${clientName}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  } catch (e) {
+    console.error('Error exporting budget JSON', e);
+    alert('Error al exportar el archivo JSON');
+  }
+}
+
+/**
+ * Exports a complete backup (.json) with all saved budgets, profile and prices
+ */
+export function exportFullBackup() {
+  try {
+    const current = loadCurrentBudget();
+    const saved = getSavedBudgetsList();
+    const contractor = loadContractorProfile();
+    const catalog = loadPriceCatalog();
+
+    const backupData = {
+      version: '1.0',
+      type: 'pom_full_backup',
+      exportedAt: new Date().toISOString(),
+      currentBudget: current,
+      savedBudgets: saved,
+      contractorProfile: contractor,
+      priceCatalog: catalog
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    const date = new Date().toISOString().split('T')[0];
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `Respaldo_Presupuestos_Completo_${date}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  } catch (e) {
+    console.error('Error exporting full backup', e);
+    alert('Error al exportar el respaldo completo');
+  }
+}
+
