@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import ClientInfoForm from './components/ClientInfoForm';
 import SpaceList from './components/SpaceList';
+import ExclusionsEditor from './components/ExclusionsEditor';
 import BudgetSummary from './components/BudgetSummary';
 import ContractorModal from './components/ContractorModal';
 import QuickPricesModal from './components/QuickPricesModal';
@@ -23,7 +24,7 @@ import {
 } from './utils/storage';
 import { calculateBudgetFinancials } from './utils/calculations';
 import { generateBudgetPDF } from './utils/pdfGenerator';
-import { DEFAULT_CLIENT } from './types/budget';
+import { DEFAULT_CLIENT, DEFAULT_EXCLUSIONS } from './types/budget';
 
 export default function App() {
   // Load initial states from LocalStorage
@@ -31,6 +32,7 @@ export default function App() {
   
   const [client, setClient] = useState(initialBudget.client || DEFAULT_CLIENT);
   const [spaces, setSpaces] = useState(initialBudget.spaces || getInitialSpaces());
+  const [exclusions, setExclusions] = useState(initialBudget.exclusions || DEFAULT_EXCLUSIONS);
   const [financialSettings, setFinancialSettings] = useState(
     initialBudget.financialSettings || {
       overheadPercent: 10,
@@ -75,11 +77,12 @@ export default function App() {
     return {
       client,
       spaces,
+      exclusions,
       financialSettings,
       financials,
       notes
     };
-  }, [client, spaces, financialSettings, financials, notes]);
+  }, [client, spaces, exclusions, financialSettings, financials, notes]);
 
   // Auto-save draft on changes
   useEffect(() => {
@@ -196,6 +199,7 @@ export default function App() {
     const fresh = getCleanStarterBudget();
     setClient(fresh.client);
     setSpaces(fresh.spaces);
+    setExclusions(fresh.exclusions || DEFAULT_EXCLUSIONS);
     setFinancialSettings(fresh.financialSettings);
     setNotes(fresh.notes);
   };
@@ -209,6 +213,7 @@ export default function App() {
   const handleLoadBudget = (savedBudget) => {
     setClient(savedBudget.client || DEFAULT_CLIENT);
     setSpaces(savedBudget.spaces || []);
+    setExclusions(savedBudget.exclusions || DEFAULT_EXCLUSIONS);
     setFinancialSettings(savedBudget.financialSettings || {
       overheadPercent: 10,
       discountPercent: 0,
@@ -235,12 +240,19 @@ export default function App() {
     setPriceCatalog(updatedCatalog);
   };
 
-  const handleDirectDownloadPdf = () => {
+  const [pdfPreviewMode, setPdfPreviewMode] = useState('minimal'); // 'minimal' or 'detailed'
+
+  const handleDirectDownloadPdf = (mode = 'minimal') => {
     if (spaces.length === 0) {
       alert('Agrega al menos un recinto antes de exportar el PDF.');
       return;
     }
-    generateBudgetPDF(currentBudgetData, contractor, { download: true });
+    generateBudgetPDF(currentBudgetData, contractor, { mode, download: true });
+  };
+
+  const handleOpenPdfPreview = (mode = 'minimal') => {
+    setPdfPreviewMode(mode);
+    setShowPdfPreviewModal(true);
   };
 
   return (
@@ -250,7 +262,7 @@ export default function App() {
         onOpenContractorModal={() => setShowContractorModal(true)}
         onOpenPricesModal={() => setShowPricesModal(true)}
         onOpenSavedModal={() => setShowSavedModal(true)}
-        onOpenPdfPreview={() => setShowPdfPreviewModal(true)}
+        onOpenPdfPreview={() => handleOpenPdfPreview('minimal')}
         onDirectDownloadPdf={handleDirectDownloadPdf}
         spacesCount={spaces.length}
       />
@@ -273,6 +285,11 @@ export default function App() {
               onDeleteSpace={handleDeleteSpace}
               onDuplicateSpace={handleDuplicateSpace}
             />
+
+            <ExclusionsEditor
+              exclusions={exclusions}
+              onChange={setExclusions}
+            />
           </div>
 
           {/* Sidebar Column */}
@@ -284,7 +301,7 @@ export default function App() {
               onUpdateFinancialSettings={setFinancialSettings}
               onUpdateNotes={setNotes}
               onSaveBudget={handleSaveBudget}
-              onOpenPdfPreview={() => setShowPdfPreviewModal(true)}
+              onOpenPdfPreview={() => handleOpenPdfPreview('minimal')}
               onDownloadPdf={handleDirectDownloadPdf}
             />
           </div>
@@ -321,6 +338,7 @@ export default function App() {
         <PdfPreviewModal
           budgetData={currentBudgetData}
           contractorData={contractor}
+          initialMode={pdfPreviewMode}
           onClose={() => setShowPdfPreviewModal(false)}
         />
       )}

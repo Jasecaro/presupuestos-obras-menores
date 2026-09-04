@@ -117,14 +117,45 @@ export function calculateBudgetFinancials(spaces = [], globalSettings = {}) {
   const spacesBreakdown = spaces.map(space => {
     const { metrics, total } = calculateSpaceTotal(space);
     directCost += total;
-    totalFloorArea += metrics.floorArea;
-    totalNetWallArea += metrics.netWallArea;
-    totalCeilingArea += metrics.ceilingArea;
-    totalItemsCount += (space.items || []).length;
+
+    const items = space.items || [];
+
+    // Identify which surfaces have active work items budgeted in this space
+    const hasFloorWork = items.some(it => 
+      it.unitType === 'area_piso' || 
+      (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('piso'))
+    );
+
+    const hasWallWork = items.some(it => 
+      it.unitType === 'area_muros_neta' || 
+      it.unitType === 'area_muros_bruta' ||
+      (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('muro'))
+    );
+
+    const hasCeilingWork = items.some(it => 
+      it.unitType === 'area_cielo' ||
+      (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('cielo'))
+    );
+
+    // Only add to global totals if the space actually has items for that surface
+    if (hasFloorWork) {
+      totalFloorArea += metrics.floorArea;
+    }
+    if (hasWallWork) {
+      totalNetWallArea += metrics.netWallArea;
+    }
+    if (hasCeilingWork) {
+      totalCeilingArea += metrics.ceilingArea;
+    }
+
+    totalItemsCount += items.length;
 
     return {
       ...space,
       metrics,
+      hasFloorWork,
+      hasWallWork,
+      hasCeilingWork,
       spaceTotal: total
     };
   });
@@ -180,3 +211,67 @@ export function formatNumber(num, decimals = 2) {
     maximumFractionDigits: decimals
   });
 }
+
+/**
+ * Generates an executive WhatsApp text summary of the budget
+ */
+export function generateWhatsAppSummary(budgetData, contractorData) {
+  const { client, spaces = [], financials, notes } = budgetData;
+  const contractor = contractorData || {};
+
+  let text = `📋 *RESUMEN DE PRESUPUESTO*\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━\n`;
+  if (contractor.name) text += `🏢 *${contractor.name}*\n`;
+  if (contractor.phone) text += `📞 *Contacto:* ${contractor.phone}\n`;
+  text += `📄 *Folio:* ${client.quoteNumber || 'PTO-001'}\n`;
+  text += `📅 *Fecha:* ${client.date || new Date().toLocaleDateString('es-CL')}\n`;
+  if (client.name) text += `👤 *Cliente:* ${client.name}\n`;
+  if (client.address) text += `📍 *Ubicación:* ${client.address} ${client.city ? `(${client.city})` : ''}\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+  text += `🛠️ *ALCANCE DE TRABAJOS A REALIZAR:*\n`;
+  spaces.forEach((space, idx) => {
+    text += `\n🔹 *${idx + 1}. ${space.name.toUpperCase()}*\n`;
+    const items = space.items || [];
+    if (items.length === 0) {
+      text += `  • Trabajos y reparaciones según coordinación en terreno.\n`;
+    } else {
+      items.forEach(item => {
+        text += `  • ${item.name}\n`;
+      });
+    }
+  });
+
+  text += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
+  const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';
+  text += `⏱️ *Plazo Estimado:* ${client.estimatedWorkDays ? `${client.estimatedWorkDays} ${workDaysLabel}` : 'A convenir'}\n`;
+  if (contractor.paymentTerms) {
+    text += `💳 *Forma de Pago:* ${contractor.paymentTerms}\n`;
+  }
+  if (contractor.warranty) {
+    text += `🛡️ *Garantía:* ${contractor.warranty}\n`;
+  }
+  if (notes) {
+    text += `📝 *Observaciones:* ${notes}\n`;
+  }
+
+  const exclusions = budgetData.exclusions || [];
+  if (exclusions.length > 0) {
+    text += `\n🚫 *NO INCLUYE (EXCLUSIONES):*\n`;
+    exclusions.forEach(ex => {
+      text += `  • ${ex}\n`;
+    });
+  }
+
+  text += `\n💰 *TOTAL PRESUPUESTO:* *${formatCurrency(financials?.grandTotal || 0)}*`;
+  if (financials?.applyTax) {
+    text += ` _(IVA Incluido)_\n`;
+  } else {
+    text += ` _(Valor Neto)_\n`;
+  }
+  text += `━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `_Presupuesto válido por ${client.validityDays || 15} días._`;
+
+  return text;
+}
+

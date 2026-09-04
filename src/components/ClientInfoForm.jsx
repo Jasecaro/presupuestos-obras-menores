@@ -151,15 +151,24 @@ export default function ClientInfoForm({ client, onChange }) {
                 <Clock size={14} />
                 Plazo Estimado de Ejecución:
               </label>
-              <div className="input-with-addon">
+              <div style={{ display: 'flex', gap: '0.35rem' }}>
                 <input
                   type="number"
                   min="1"
                   className="form-input"
-                  value={client.estimatedWorkDays || 7}
+                  style={{ width: '75px', textAlign: 'center' }}
+                  value={client.estimatedWorkDays ?? 5}
                   onChange={(e) => handleFieldChange('estimatedWorkDays', e.target.value)}
                 />
-                <span className="input-addon">días hábiles</span>
+                <select
+                  className="form-select"
+                  style={{ flex: 1, padding: '0.45rem 0.5rem', fontSize: '0.82rem' }}
+                  value={client.workDaysType || 'hábiles'}
+                  onChange={(e) => handleFieldChange('workDaysType', e.target.value)}
+                >
+                  <option value="hábiles">días hábiles</option>
+                  <option value="corridos">días corridos</option>
+                </select>
               </div>
             </div>
           </div>

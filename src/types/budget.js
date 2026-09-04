@@ -277,5 +277,25 @@ export const DEFAULT_CLIENT = {
   quoteNumber: `PTO-${new Date().getFullYear()}-001`,
   date: new Date().toISOString().split('T')[0],
   validityDays: 15,
-  estimatedWorkDays: 5
+  estimatedWorkDays: 5,
+  workDaysType: 'hábiles'
 };
+
+export const DEFAULT_EXCLUSIONS = [
+  'Materiales de terminación fina (cerámicas, artefactos, griferías o lámparas a suministrar por el cliente)',
+  'Retiro de escombros o basura ajena a los trabajos aquí especificados',
+  'Modificaciones estructurales, permisos municipales o proyectos de cálculo',
+  'Reparaciones por vicios ocultos no detectables en la visita técnica previa'
+];
+
+export const SUGGESTED_EXCLUSIONS = [
+  'Materiales de terminación (cerámicas, artefactos, griferías)',
+  'Retiro de escombros de obras o demoliciones anteriores',
+  'Modificaciones estructurales o cálculo de ingeniería',
+  'Permisos municipales y trámites de edificación',
+  'Reparación de filtraciones o daños ocultos en muros/cañerías',
+  'Movimiento y protección de mobiliario delicado o línea blanca',
+  'Trabajos en horarios nocturnos, festivos o fines de semana',
+  'Pintura o terminaciones exteriores no especificadas'
+];
+

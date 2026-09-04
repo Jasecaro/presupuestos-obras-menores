@@ -125,10 +125,28 @@ export default function SpaceCard({
     });
   };
 
-  // Compute space total
-  const spaceTotal = (space.items || []).reduce((sum, item) => {
+  // Compute space total and active surface types
+  const spaceItems = space.items || [];
+  const spaceTotal = spaceItems.reduce((sum, item) => {
     return sum + calculateItemSubtotal(item, metrics);
   }, 0);
+
+  const hasFloorItems = spaceItems.some(it => 
+    it.unitType === 'area_piso' || 
+    (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('piso'))
+  );
+  const hasWallItems = spaceItems.some(it => 
+    it.unitType === 'area_muros_neta' || 
+    it.unitType === 'area_muros_bruta' ||
+    (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('muro'))
+  );
+  const hasSkirtingItems = spaceItems.some(it => 
+    it.unitType === 'perimetro_neto' || it.unitType === 'perimetro_bruto'
+  );
+  const hasCeilingItems = spaceItems.some(it => 
+    it.unitType === 'area_cielo' ||
+    (it.unitType === 'manual' && it.unit === 'm²' && it.name?.toLowerCase().includes('cielo'))
+  );
 
   return (
     <div className="space-card">
@@ -149,47 +167,51 @@ export default function SpaceCard({
           }}>
             {index + 1}
           </div>
-          <input
-            type="text"
-            className="space-name-input"
-            value={space.name || ''}
-            onChange={(e) => handleNameChange(e.target.value)}
-            placeholder="Nombre del Recinto (ej. Dormitorio Principal)"
-          />
+          <div>
+            <input
+              type="text"
+              className="space-name-input"
+              value={space.name || ''}
+              onChange={(e) => handleNameChange(e.target.value)}
+              placeholder="Nombre del recinto (ej. Dormitorio 1)"
+            />
+          </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <div className="space-subtotal-badge">
-            <span className="space-subtotal-label">Subtotal Recinto</span>
-            <span className="space-subtotal-amount">{formatCurrency(spaceTotal)}</span>
+        <div className="space-actions">
+          <div style={{ textAlign: 'right', marginRight: '0.25rem' }}>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
+              Subtotal Recinto
+            </span>
+            <span className="space-total-badge">
+              {formatCurrency(spaceTotal)}
+            </span>
           </div>
 
           <button
             type="button"
-            className="btn btn-secondary btn-sm"
+            className="btn btn-ghost btn-sm"
             onClick={() => onDuplicateSpace(space)}
             title="Duplicar este recinto"
-            style={{ padding: '6px 8px' }}
           >
-            <Copy size={15} />
+            <Copy size={16} />
           </button>
 
           <button
             type="button"
-            className="btn btn-danger-outline btn-sm"
+            className="btn btn-ghost btn-sm"
             onClick={() => onDeleteSpace(space.id)}
             title="Eliminar este recinto"
-            style={{ padding: '6px 8px' }}
+            style={{ color: 'var(--danger)' }}
           >
-            <Trash2 size={15} />
+            <Trash2 size={16} />
           </button>
 
           <button
             type="button"
             className="btn btn-ghost btn-sm"
             onClick={() => setIsExpanded(!isExpanded)}
-            title={isExpanded ? 'Contraer' : 'Expandir'}
-            style={{ padding: '6px 8px' }}
+            title={isExpanded ? 'Contraer recinto' : 'Expandir recinto'}
           >
             {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </button>
@@ -199,7 +221,7 @@ export default function SpaceCard({
       {isExpanded && (
         <div className="space-body">
           {/* Dimensions Controls */}
-          <div className="form-grid-4" style={{ alignItems: 'flex-end' }}>
+          <div className="dimensions-grid">
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">
                 <Ruler size={13} />
@@ -292,16 +314,29 @@ export default function SpaceCard({
 
           {/* Calculated Metrics Badges */}
           <div className="metric-pills-row">
-            <div className="metric-pill highlight" title="Área de piso calculada (Largo x Ancho)">
-              <Square size={14} color="var(--primary)" />
+            <div 
+              className={`metric-pill ${hasFloorItems ? 'highlight' : ''}`} 
+              style={{ opacity: hasFloorItems ? 1 : 0.65, borderStyle: hasFloorItems ? 'solid' : 'dashed' }}
+              title={hasFloorItems ? "Área de piso presupuestada en este recinto" : "Área de piso calculada (Sin partidas de piso en este recinto)"}
+            >
+              <Square size={14} color={hasFloorItems ? "var(--primary)" : "var(--text-muted)"} />
               <span className="metric-pill-label">Piso:</span>
-              <span className="metric-pill-value">{formatNumber(metrics.floorArea)} m²</span>
+              <span className="metric-pill-value" style={{ color: hasFloorItems ? 'var(--primary)' : 'var(--text-secondary)' }}>
+                {formatNumber(metrics.floorArea)} m²
+              </span>
+              {!hasFloorItems && <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginLeft: '0.2rem' }}>(Sin piso)</span>}
             </div>
 
-            <div className="metric-pill highlight" title="Área neta de muros a pintar descontando vanos">
-              <Paintbrush size={14} color="var(--primary)" />
+            <div 
+              className={`metric-pill ${hasWallItems ? 'highlight' : ''}`}
+              style={{ opacity: hasWallItems ? 1 : 0.65, borderStyle: hasWallItems ? 'solid' : 'dashed' }}
+              title={hasWallItems ? "Área neta de muros presupuestada (descontando vanos)" : "Área neta de muros"}
+            >
+              <Paintbrush size={14} color={hasWallItems ? "var(--primary)" : "var(--text-muted)"} />
               <span className="metric-pill-label">Muros Netos:</span>
-              <span className="metric-pill-value">{formatNumber(metrics.netWallArea)} m²</span>
+              <span className="metric-pill-value" style={{ color: hasWallItems ? 'var(--primary)' : 'var(--text-secondary)' }}>
+                {formatNumber(metrics.netWallArea)} m²
+              </span>
             </div>
 
             <div className="metric-pill" title="Área bruta de muros sin descontar vanos">
@@ -318,17 +353,25 @@ export default function SpaceCard({
               </span>
             </div>
 
-            <div className="metric-pill" title="Perímetro neto para instalación de guardapolvos / zócalos">
-              <Layers size={14} color="var(--purple)" />
+            <div 
+              className={`metric-pill ${hasSkirtingItems ? 'highlight' : ''}`}
+              style={{ opacity: hasSkirtingItems ? 1 : 0.65, borderStyle: hasSkirtingItems ? 'solid' : 'dashed' }}
+              title="Perímetro neto para instalación de guardapolvos / zócalos"
+            >
+              <Layers size={14} color={hasSkirtingItems ? "var(--purple)" : "var(--text-muted)"} />
               <span className="metric-pill-label">Guardapolvos:</span>
-              <span className="metric-pill-value" style={{ color: 'var(--purple)' }}>
+              <span className="metric-pill-value" style={{ color: hasSkirtingItems ? 'var(--purple)' : 'var(--text-secondary)' }}>
                 {formatNumber(metrics.skirtingPerimeter)} ml
               </span>
             </div>
 
-            <div className="metric-pill" title="Área de cielo raso">
+            <div 
+              className={`metric-pill ${hasCeilingItems ? 'highlight' : ''}`}
+              style={{ opacity: hasCeilingItems ? 1 : 0.65, borderStyle: hasCeilingItems ? 'solid' : 'dashed' }}
+              title="Área de cielo raso"
+            >
               <span className="metric-pill-label">Cielo:</span>
-              <span className="metric-pill-value" style={{ color: 'var(--cyan)' }}>
+              <span className="metric-pill-value" style={{ color: hasCeilingItems ? 'var(--cyan)' : 'var(--text-secondary)' }}>
                 {formatNumber(metrics.ceilingArea)} m²
               </span>
             </div>

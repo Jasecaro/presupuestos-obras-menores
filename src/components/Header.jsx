@@ -68,20 +68,20 @@ export default function Header({
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={onOpenPdfPreview}
-            title="Ver vista previa del PDF"
+            title="Ver y elegir formatos de presupuesto (Minimalista, Detallado, WhatsApp)"
           >
             <FileText size={16} />
-            <span>Vista Previa</span>
+            <span>Formatos / PDF</span>
           </button>
 
           <button
             type="button"
             className="btn btn-primary btn-sm"
-            onClick={onDirectDownloadPdf}
-            title="Descargar presupuesto oficial en PDF"
+            onClick={() => onDirectDownloadPdf('minimal')}
+            title="Descargar presupuesto resumen en PDF (versión minimalista)"
           >
             <Download size={16} />
-            <span>Descargar PDF</span>
+            <span>Descargar Resumen</span>
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { DEFAULT_CONTRACTOR, DEFAULT_CLIENT, DEFAULT_PRICE_CATALOG, SPACE_PRESETS } from '../types/budget';
+import { DEFAULT_CONTRACTOR, DEFAULT_CLIENT, DEFAULT_PRICE_CATALOG, DEFAULT_EXCLUSIONS, SPACE_PRESETS } from '../types/budget';
 
 const STORAGE_KEYS = {
   CURRENT_BUDGET: 'pom_current_budget',
@@ -50,7 +50,8 @@ export const getCleanStarterBudget = () => ({
     quoteNumber: `PTO-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 900) + 100)}`,
     date: new Date().toISOString().split('T')[0],
     validityDays: 15,
-    estimatedWorkDays: 5
+    estimatedWorkDays: 5,
+    workDaysType: 'hábiles'
   },
   spaces: getInitialSpaces(),
   financialSettings: {
@@ -59,6 +60,7 @@ export const getCleanStarterBudget = () => ({
     applyTax: false,
     taxRate: 19
   },
+  exclusions: [...DEFAULT_EXCLUSIONS],
   notes: 'Presupuesto no incluye modificaciones estructurales no especificadas.'
 });
 

@@ -9,7 +9,8 @@ import {
   ShieldCheck, 
   Info,
   Square,
-  Paintbrush
+  Paintbrush,
+  Sparkles
 } from 'lucide-react';
 import { formatCurrency, formatNumber } from '../utils/calculations';
 
@@ -39,26 +40,32 @@ export default function BudgetSummary({
 
       <div className="summary-body">
         {/* Surface Area Metrics Summary */}
-        <div style={{
-          backgroundColor: 'var(--bg-card-subtle)',
-          padding: '0.75rem',
-          borderRadius: 'var(--radius-md)',
-          marginBottom: '1rem',
-          fontSize: '0.8rem'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--text-secondary)' }}>
-              <Square size={13} color="var(--primary)" /> Sup. Total Pisos:
-            </span>
-            <strong style={{ fontFamily: 'var(--font-mono)' }}>{formatNumber(financials.totalFloorArea)} m²</strong>
+        {(financials.totalFloorArea > 0 || financials.totalNetWallArea > 0) && (
+          <div style={{
+            backgroundColor: 'var(--bg-card-subtle)',
+            padding: '0.75rem',
+            borderRadius: 'var(--radius-md)',
+            marginBottom: '1rem',
+            fontSize: '0.8rem'
+          }}>
+            {financials.totalFloorArea > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: financials.totalNetWallArea > 0 ? '0.35rem' : 0 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--text-secondary)' }} title="Suma de áreas de pisos donde hay partidas de piso presupuestadas">
+                  <Square size={13} color="var(--primary)" /> Pisos a Ejecutar:
+                </span>
+                <strong style={{ fontFamily: 'var(--font-mono)' }}>{formatNumber(financials.totalFloorArea)} m²</strong>
+              </div>
+            )}
+            {financials.totalNetWallArea > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--text-secondary)' }} title="Suma de muros netos donde hay partidas de pintura/muros presupuestadas">
+                  <Paintbrush size={13} color="var(--primary)" /> Muros Netos:
+                </span>
+                <strong style={{ fontFamily: 'var(--font-mono)' }}>{formatNumber(financials.totalNetWallArea)} m²</strong>
+              </div>
+            )}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--text-secondary)' }}>
-              <Paintbrush size={13} color="var(--primary)" /> Sup. Total Muros Netos:
-            </span>
-            <strong style={{ fontFamily: 'var(--font-mono)' }}>{formatNumber(financials.totalNetWallArea)} m²</strong>
-          </div>
-        </div>
+        )}
 
         {/* Cost Breakdown */}
         <div className="summary-row">
@@ -163,15 +170,29 @@ export default function BudgetSummary({
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '1.25rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
+          {/* Minimalist Summary PDF Download Button */}
           <button
             type="button"
-            className="btn btn-primary btn-lg"
-            onClick={onDownloadPdf}
-            style={{ width: '100%', justifyContent: 'center' }}
+            className="btn btn-primary"
+            onClick={() => onDownloadPdf('minimal')}
+            style={{ width: '100%', justifyContent: 'center', fontWeight: '700' }}
+            title="Descargar versión resumen (solo alcance de trabajos y total)"
           >
-            <Download size={18} />
-            <span>Descargar Presupuesto PDF</span>
+            <Sparkles size={16} />
+            <span>Descargar Versión Minimalista</span>
+          </button>
+
+          {/* Detailed Full PDF Download Button */}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => onDownloadPdf('detailed')}
+            style={{ width: '100%', justifyContent: 'center' }}
+            title="Descargar versión completa con desglose de m² y precios unitarios"
+          >
+            <Download size={15} />
+            <span>Descargar Versión Detallada</span>
           </button>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
@@ -180,9 +201,10 @@ export default function BudgetSummary({
               className="btn btn-secondary"
               onClick={onOpenPdfPreview}
               style={{ justifyContent: 'center' }}
+              title="Previsualizar formatos y copiar texto para WhatsApp"
             >
               <FileText size={15} />
-              <span>Ver PDF</span>
+              <span>Ver Formatos</span>
             </button>
 
             <button
@@ -190,6 +212,7 @@ export default function BudgetSummary({
               className="btn btn-secondary"
               onClick={onSaveBudget}
               style={{ justifyContent: 'center' }}
+              title="Guardar presupuesto en el historial"
             >
               <Save size={15} />
               <span>Guardar</span>
@@ -200,3 +223,4 @@ export default function BudgetSummary({
     </aside>
   );
 }
+
