@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { formatCurrency, formatNumber, calculateSpaceMetrics, getItemQuantity, calculateItemSubtotal } from './calculations';
+import { triggerFileDownload } from './downloader';
 
 // Common Colors Palette
 const PRIMARY_COLOR = [37, 99, 235]; // #2563eb Royal Blue
@@ -653,8 +654,16 @@ export function generateBudgetPDF(budgetData, contractorData, options = { mode: 
 
   if (options.download) {
     const prefix = mode === 'minimal' ? 'Resumen_Presupuesto' : 'Presupuesto_Detallado';
-    const fileName = `${prefix}_${client.quoteNumber || 'Obra'}_${(client.name || 'Cliente').replace(/\s+/g, '_')}.pdf`;
-    doc.save(fileName);
+    const cleanClient = (client.name || 'Cliente')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9_-]/g, '_');
+    const cleanQuote = (client.quoteNumber || 'Obra').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const fileName = `${prefix}_${cleanQuote}_${cleanClient}.pdf`;
+    
+    // Obtain raw Blob and trigger reliable download with clean filename
+    const pdfBlob = doc.output('blob');
+    triggerFileDownload(pdfBlob, fileName, 'application/pdf');
   }
 
   if (options.returnBlobUrl) {

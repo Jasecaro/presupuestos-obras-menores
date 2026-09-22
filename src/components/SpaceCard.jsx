@@ -12,7 +12,9 @@ import {
   ChevronDown, 
   ChevronUp, 
   Sparkles,
-  Maximize2
+  Maximize2,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { 
   calculateSpaceMetrics, 
@@ -26,13 +28,18 @@ import { WORK_CATEGORIES } from '../types/budget';
 export default function SpaceCard({
   space,
   index,
+  totalSpaces = 1,
+  isFirst = false,
+  isLast = false,
   priceCatalog = [],
   onUpdateSpace,
   onDeleteSpace,
-  onDuplicateSpace
+  onDuplicateSpace,
+  onMoveSpace
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [showAddCustomModal, setShowAddCustomModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [customItemForm, setCustomItemForm] = useState({
     name: '',
     description: '',
@@ -97,19 +104,35 @@ export default function SpaceCard({
     onUpdateSpace({ ...space, items });
   };
 
+  // Reorder items inside space
+  const handleMoveItem = (itemId, direction) => {
+    const currentItems = space.items || [];
+    const index = currentItems.findIndex(item => item.id === itemId);
+    if (index === -1) return;
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= currentItems.length) return;
+
+    const newItems = [...currentItems];
+    const temp = newItems[index];
+    newItems[index] = newItems[targetIndex];
+    newItems[targetIndex] = temp;
+
+    onUpdateSpace({ ...space, items: newItems });
+  };
+
   // Add custom item
   const handleSaveCustomItem = (e) => {
     e.preventDefault();
     if (!customItemForm.name.trim()) return;
 
     const newItem = {
-      id: `custom_${Date.now()}`,
-      name: customItemForm.name,
-      description: customItemForm.description,
-      unit: customItemForm.unit,
-      unitType: customItemForm.unitType,
-      unitPrice: parseFloat(customItemForm.unitPrice) || 0,
-      quantity: parseFloat(customItemForm.quantity) || 1
+      id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+      name: customItemForm.name.trim(),
+      description: customItemForm.description.trim(),
+      unit: customItemForm.unit || 'un',
+      unitType: customItemForm.unitType || 'fixed',
+      unitPrice: Math.max(0, parseFloat(customItemForm.unitPrice) || 0),
+      quantity: Math.max(0.01, parseFloat(customItemForm.quantity) || 1)
     };
 
     const items = [...(space.items || []), newItem];
@@ -188,6 +211,60 @@ export default function SpaceCard({
             </span>
           </div>
 
+          {/* Reorder Up / Down Buttons */}
+          {totalSpaces > 1 && (
+            <div 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                backgroundColor: 'var(--bg-main)', 
+                borderRadius: 'var(--radius-sm)', 
+                border: '1px solid var(--border-color)', 
+                padding: '1px',
+                marginRight: '0.2rem'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                style={{ 
+                  padding: '3px 6px', 
+                  opacity: isFirst ? 0.3 : 1, 
+                  cursor: isFirst ? 'not-allowed' : 'pointer' 
+                }}
+                disabled={isFirst}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onMoveSpace && onMoveSpace(space.id, -1);
+                }}
+                title={isFirst ? 'Ya está al principio' : 'Subir recinto (aparecerá antes en el presupuesto y PDF)'}
+              >
+                <ArrowUp size={14} />
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                style={{ 
+                  padding: '3px 6px', 
+                  opacity: isLast ? 0.3 : 1, 
+                  cursor: isLast ? 'not-allowed' : 'pointer' 
+                }}
+                disabled={isLast}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onMoveSpace && onMoveSpace(space.id, 1);
+                }}
+                title={isLast ? 'Ya está al final' : 'Bajar recinto (aparecerá después en el presupuesto y PDF)'}
+              >
+                <ArrowDown size={14} />
+              </button>
+            </div>
+          )}
+
           <button
             type="button"
             className="btn btn-ghost btn-sm"
@@ -197,15 +274,74 @@ export default function SpaceCard({
             <Copy size={16} />
           </button>
 
-          <button
-            type="button"
-            className="btn btn-ghost btn-sm"
-            onClick={() => onDeleteSpace(space.id)}
-            title="Eliminar este recinto"
-            style={{ color: 'var(--danger)' }}
-          >
-            <Trash2 size={16} />
-          </button>
+          {showDeleteConfirm ? (
+            <div 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '0.35rem', 
+                backgroundColor: 'var(--danger-subtle)', 
+                padding: '0.2rem 0.45rem', 
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid #fecaca'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--danger)' }}>
+                ¿Borrar?
+              </span>
+              <button
+                type="button"
+                className="btn btn-sm"
+                style={{ 
+                  backgroundColor: 'var(--danger)', 
+                  color: 'white', 
+                  padding: '0.2rem 0.5rem', 
+                  fontSize: '0.72rem',
+                  lineHeight: 1
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDeleteSpace(space.id);
+                }}
+                title="Confirmar eliminación del recinto"
+              >
+                Sí, borrar
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                style={{ 
+                  padding: '0.2rem 0.45rem', 
+                  fontSize: '0.72rem',
+                  lineHeight: 1
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowDeleteConfirm(false);
+                }}
+                title="Cancelar"
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowDeleteConfirm(true);
+              }}
+              title="Eliminar este recinto"
+              style={{ color: 'var(--danger)', cursor: 'pointer' }}
+            >
+              <Trash2 size={16} />
+            </button>
+          )}
 
           <button
             type="button"
@@ -446,11 +582,11 @@ export default function SpaceCard({
                       <th style={{ width: '130px', textAlign: 'center' }}>Superficie / Cant.</th>
                       <th style={{ width: '130px', textAlign: 'right' }}>Precio Unitario</th>
                       <th style={{ width: '110px', textAlign: 'right' }}>Subtotal</th>
-                      <th style={{ width: '36px', textAlign: 'center' }}></th>
+                      <th style={{ width: '80px', textAlign: 'center' }}></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {space.items.map((item) => {
+                    {space.items.map((item, itemIndex) => {
                       const qty = getItemQuantity(item, metrics);
                       const subtotal = calculateItemSubtotal(item, metrics);
                       const isAutoMetric = item.unitType && item.unitType !== 'manual' && item.unitType !== 'fixed';
@@ -458,16 +594,33 @@ export default function SpaceCard({
                       return (
                         <tr key={item.id}>
                           <td className="item-name-cell">
-                            <input
-                              type="text"
-                              className="form-input"
-                              style={{ padding: '0.3rem 0.5rem', fontSize: '0.82rem', fontWeight: '600' }}
-                              value={item.name}
-                              onChange={(e) => handleUpdateItem(item.id, { name: e.target.value })}
-                            />
-                            {item.description && (
-                              <div className="item-desc-sub">{item.description}</div>
-                            )}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                              <span 
+                                style={{ 
+                                  fontSize: '0.74rem', 
+                                  fontWeight: '700', 
+                                  color: 'var(--text-muted)', 
+                                  minWidth: '18px',
+                                  textAlign: 'center',
+                                  userSelect: 'none'
+                                }}
+                                title={`Partida #${itemIndex + 1}`}
+                              >
+                                {itemIndex + 1}.
+                              </span>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <input
+                                  type="text"
+                                  className="form-input"
+                                  style={{ padding: '0.3rem 0.5rem', fontSize: '0.82rem', fontWeight: '600' }}
+                                  value={item.name}
+                                  onChange={(e) => handleUpdateItem(item.id, { name: e.target.value })}
+                                />
+                                {item.description && (
+                                  <div className="item-desc-sub">{item.description}</div>
+                                )}
+                              </div>
+                            </div>
                           </td>
 
                           <td style={{ textAlign: 'center' }}>
@@ -512,16 +665,52 @@ export default function SpaceCard({
                             {formatCurrency(subtotal)}
                           </td>
 
-                          <td style={{ textAlign: 'center' }}>
-                            <button
-                              type="button"
-                              className="btn btn-ghost btn-sm"
-                              style={{ padding: '4px', color: 'var(--text-muted)' }}
-                              onClick={() => handleDeleteItem(item.id)}
-                              title="Eliminar partida"
-                            >
-                              <Trash2 size={15} />
-                            </button>
+                          <td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', justifyContent: 'center' }}>
+                              {space.items.length > 1 && (
+                                <>
+                                  <button
+                                    type="button"
+                                    className="btn btn-ghost btn-sm"
+                                    style={{ 
+                                      padding: '3px 4px', 
+                                      color: 'var(--text-muted)',
+                                      opacity: itemIndex === 0 ? 0.25 : 1,
+                                      cursor: itemIndex === 0 ? 'not-allowed' : 'pointer'
+                                    }}
+                                    disabled={itemIndex === 0}
+                                    onClick={() => handleMoveItem(item.id, -1)}
+                                    title={itemIndex === 0 ? 'Primera partida' : 'Subir partida (orden lógico)'}
+                                  >
+                                    <ArrowUp size={13} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-ghost btn-sm"
+                                    style={{ 
+                                      padding: '3px 4px', 
+                                      color: 'var(--text-muted)',
+                                      opacity: itemIndex === space.items.length - 1 ? 0.25 : 1,
+                                      cursor: itemIndex === space.items.length - 1 ? 'not-allowed' : 'pointer'
+                                    }}
+                                    disabled={itemIndex === space.items.length - 1}
+                                    onClick={() => handleMoveItem(item.id, 1)}
+                                    title={itemIndex === space.items.length - 1 ? 'Última partida' : 'Bajar partida (orden lógico)'}
+                                  >
+                                    <ArrowDown size={13} />
+                                  </button>
+                                </>
+                              )}
+                              <button
+                                type="button"
+                                className="btn btn-ghost btn-sm"
+                                style={{ padding: '3px 4px', color: 'var(--text-muted)' }}
+                                onClick={() => handleDeleteItem(item.id)}
+                                title="Eliminar partida"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -536,7 +725,16 @@ export default function SpaceCard({
 
       {/* Modal to add Custom Item / Closets / Repairs */}
       {showAddCustomModal && (
-        <div className="modal-overlay" onClick={() => setShowAddCustomModal(false)}>
+        <div 
+          className="modal-overlay" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              if (!customItemForm.name.trim() || window.confirm('¿Deseas descartar esta partida sin agregarla?')) {
+                setShowAddCustomModal(false);
+              }
+            }
+          }}
+        >
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div className="modal-title">

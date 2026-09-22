@@ -5,16 +5,26 @@ import { formatCurrency } from '../utils/calculations';
 
 export default function QuickPricesModal({ catalog, onSaveCatalog, onClose }) {
   const [items, setItems] = useState([...catalog]);
+  const [isDirty, setIsDirty] = useState(false);
 
   const handlePriceChange = (id, newPrice) => {
     const val = parseFloat(newPrice) || 0;
     setItems(prev => prev.map(item => item.id === id ? { ...item, unitPrice: val } : item));
+    setIsDirty(true);
   };
 
   const handleResetDefaults = () => {
     if (window.confirm('¿Deseas restaurar todos los precios unitarios a los valores sugeridos por defecto?')) {
       setItems([...DEFAULT_PRICE_CATALOG]);
+      setIsDirty(true);
     }
+  };
+
+  const handleSafeClose = () => {
+    if (isDirty && !window.confirm('¿Deseas descartar los cambios de precios realizados?')) {
+      return;
+    }
+    onClose();
   };
 
   const handleSave = (e) => {
@@ -24,14 +34,21 @@ export default function QuickPricesModal({ catalog, onSaveCatalog, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div 
+      className="modal-overlay" 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          handleSafeClose();
+        }
+      }}
+    >
       <div className="modal-card modal-card-lg" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title">
             <DollarSign size={20} color="var(--primary)" />
             <span>Configurar Precios Base ($/m² y Unitarios)</span>
           </div>
-          <button type="button" className="btn btn-ghost btn-sm" onClick={onClose}>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={handleSafeClose}>
             <X size={20} />
           </button>
         </div>
@@ -100,7 +117,7 @@ export default function QuickPricesModal({ catalog, onSaveCatalog, onClose }) {
             </button>
 
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
+              <button type="button" className="btn btn-secondary" onClick={handleSafeClose}>
                 Cancelar
               </button>
               <button type="submit" className="btn btn-primary">

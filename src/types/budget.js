@@ -5,6 +5,7 @@ export const SPACE_PRESETS = [
   { id: 'dormitorio-3', name: 'Dormitorio 3', icon: 'BedSingle', defaultLength: 2.8, defaultWidth: 2.5, defaultHeight: 2.4, defaultDoors: 1, defaultWindows: 1 },
   { id: 'living-comedor', name: 'Living / Comedor', icon: 'Sofa', defaultLength: 5.5, defaultWidth: 3.8, defaultHeight: 2.4, defaultDoors: 2, defaultWindows: 2 },
   { id: 'cocina', name: 'Cocina', icon: 'ChefHat', defaultLength: 3.2, defaultWidth: 2.2, defaultHeight: 2.4, defaultDoors: 1, defaultWindows: 1 },
+  { id: 'logia-calefont', name: 'Logia / Traslado Calefont', icon: 'Flame', defaultLength: 2.4, defaultWidth: 1.6, defaultHeight: 2.4, defaultDoors: 1, defaultWindows: 1 },
   { id: 'bano-p', name: 'Baño Principal', icon: 'Bath', defaultLength: 2.2, defaultWidth: 1.8, defaultHeight: 2.4, defaultDoors: 1, defaultWindows: 1 },
   { id: 'bano-visita', name: 'Baño de Visitas', icon: 'Droplets', defaultLength: 1.8, defaultWidth: 1.4, defaultHeight: 2.4, defaultDoors: 1, defaultWindows: 0 },
   { id: 'pasillo', name: 'Pasillo / Hall', icon: 'Footprints', defaultLength: 4.0, defaultWidth: 1.1, defaultHeight: 2.4, defaultDoors: 4, defaultWindows: 0 },
@@ -14,6 +15,9 @@ export const SPACE_PRESETS = [
 
 // Catalog of Standard Work Items for Minor Works
 export const WORK_CATEGORIES = {
+  GAS_CALEFONT: 'Calefont, Gas y Gasfitería',
+  ELECTRICIDAD: 'Instalaciones Eléctricas',
+  ALBANILERIA: 'Albañilería y Obras Civiles',
   PINTURA: 'Pintura y Terminaciones',
   PISOS: 'Pisos y Revestimientos',
   CARPINTERIA: 'Mobiliario, Closets y Carpintería',
@@ -22,6 +26,142 @@ export const WORK_CATEGORIES = {
 };
 
 export const DEFAULT_PRICE_CATALOG = [
+  // Calefont, Gas y Gasfitería
+  {
+    id: 'desmontaje_calefont',
+    name: 'Desmontaje Seguro de Calefont Existente',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'un',
+    unitType: 'fixed',
+    unitPrice: 25000,
+    description: 'Desconexión de redes de agua y gas con corte preventivo, retiro de anclajes y sellado.',
+    includesMaterials: false
+  },
+  {
+    id: 'extension_gas_cobre',
+    name: 'Extensión de Red de Gas en Cobre Tipo L',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 65000,
+    description: 'Trazado en tubería cobre, uniones en soldadura fuerte (plata), llave de paso de corte certificada y abrazaderas normadas.',
+    includesMaterials: false
+  },
+  {
+    id: 'extension_agua_fria_caliente',
+    name: 'Extensión de Redes de Agua Fría y Caliente (PPR / Cobre)',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 55000,
+    description: 'Canalización en tubería PPR termofusión o cobre, llaves de paso de corte angulares y terminales con hilo.',
+    includesMaterials: false
+  },
+  {
+    id: 'montaje_calefont_conexion',
+    name: 'Montaje, Fijación y Conexión de Calefont en Nueva Ubicación',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'un',
+    unitType: 'fixed',
+    unitPrice: 42000,
+    description: 'Fijación sólida a plomo en muro, instalación de flexibles certificados de agua y gas, y sellado antivibración.',
+    includesMaterials: false
+  },
+  {
+    id: 'ducto_evacuacion_calefont',
+    name: 'Instalación de Ducto de Evacuación de Gases y Sombrerete',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'un',
+    unitType: 'fixed',
+    unitPrice: 35000,
+    description: 'Instalación de tubo de evacuación de gases al exterior (tiro natural o forzado), sombrerete y sellado perimetral contra intemperie.',
+    includesMaterials: false
+  },
+  {
+    id: 'prueba_hermeticidad_gas',
+    name: 'Prueba de Hermeticidad, Detección de Fugas y Puesta en Marcha',
+    category: WORK_CATEGORIES.GAS_CALEFONT,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 25000,
+    description: 'Verificación manométrica/agua jabonosa de estanqueidad en circuito de gas, purga de cañerías y regulación de llama.',
+    includesMaterials: true
+  },
+
+  // Instalaciones Eléctricas
+  {
+    id: 'punto_enchufe_calefont',
+    name: 'Circuito y Enchufe Dedicado para Calefont (Tiro Forzado/Ionizado)',
+    category: WORK_CATEGORIES.ELECTRICIDAD,
+    unit: 'pto',
+    unitType: 'fixed',
+    unitPrice: 28000,
+    description: 'Canalización conduit/legrand, cableado EVA 2.5mm² libre de halógeno con tierra de protección y caja de enchufe certificada.',
+    includesMaterials: false
+  },
+  {
+    id: 'renovacion_puntos_electricos',
+    name: 'Renovación / Reemplazo de Puntos Eléctricos (Enchufes / Interruptores)',
+    category: WORK_CATEGORIES.ELECTRICIDAD,
+    unit: 'pto',
+    unitType: 'fixed',
+    unitPrice: 18000,
+    description: 'Retiro de módulos antiguos, revisión de continuidad/fase/neutro y montaje de nuevas placas y módulos normalizados.',
+    includesMaterials: false
+  },
+  {
+    id: 'adecuacion_tablero_tda',
+    name: 'Instalación de Disyuntor Automático y Diferencial en Tablero (TDA)',
+    category: WORK_CATEGORIES.ELECTRICIDAD,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 38000,
+    description: 'Montaje en riel DIN de interruptor termomagnético (10A/16A) y protector diferencial 25A 30mA certificado SEC.',
+    includesMaterials: false
+  },
+  {
+    id: 'canalizacion_cableado_electrico',
+    name: 'Canalización y Cableado Eléctrico Normalizado',
+    category: WORK_CATEGORIES.ELECTRICIDAD,
+    unit: 'ml',
+    unitType: 'fixed',
+    unitPrice: 12000,
+    description: 'Tendido de tubería conduit o moldura plástica Legrand con conductores F+N+Tierra certificados SEC.',
+    includesMaterials: false
+  },
+
+  // Albañilería y Obras Civiles
+  {
+    id: 'picado_regatas_muro',
+    name: 'Picado y Regatas en Muro para Embutir Tuberías',
+    category: WORK_CATEGORIES.ALBANILERIA,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 32000,
+    description: 'Ranurado en albañilería o tabiquería para embutir redes de agua, gas y canalizaciones eléctricas.',
+    includesMaterials: false
+  },
+  {
+    id: 'tapado_regatas_enlucido',
+    name: 'Tapado de Regatas con Mortero, Yeso y Enlucido de Parches',
+    category: WORK_CATEGORIES.ALBANILERIA,
+    unit: 'global',
+    unitType: 'fixed',
+    unitPrice: 28000,
+    description: 'Relleno de mortero de pega, puente de adherencia y empaste liso listo para recibir acabado de pintura.',
+    includesMaterials: true
+  },
+  {
+    id: 'perforacion_pasamuro_ducto',
+    name: 'Perforación de Muro / Corona para Salida de Ducto al Exterior',
+    category: WORK_CATEGORIES.ALBANILERIA,
+    unit: 'un',
+    unitType: 'fixed',
+    unitPrice: 24000,
+    description: 'Perforación circular limpia en ladrillo/mampostería para paso de cañón de evacuación con pendiente hacia el exterior.',
+    includesMaterials: false
+  },
+
   // Pinturas
   {
     id: 'pintura_muros_latex',
@@ -290,6 +430,9 @@ export const DEFAULT_EXCLUSIONS = [
 
 export const SUGGESTED_EXCLUSIONS = [
   'Materiales de terminación (cerámicas, artefactos, griferías)',
+  'Suministro del artefacto calefont (proporcionado por el cliente)',
+  'Trámites o pago de derechos por Certificación Sello Verde o Declaración SEC (TE1 / TC6)',
+  'Aumento de capacidad de empalme eléctrico general o medidor ante distribuidora eléctrica',
   'Retiro de escombros de obras o demoliciones anteriores',
   'Modificaciones estructurales o cálculo de ingeniería',
   'Permisos municipales y trámites de edificación',
