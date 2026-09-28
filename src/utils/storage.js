@@ -126,7 +126,7 @@ export function savePriceCatalog(catalog) {
 }
 
 const CURRENT_PROJECT_REVISION_KEY = 'pom_project_revision';
-const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_maestro_exact_v2';
+const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_final_9180k_v6';
 
 export function loadCurrentBudget() {
   try {

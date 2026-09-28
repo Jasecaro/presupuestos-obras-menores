@@ -113,14 +113,14 @@ export default function App() {
     setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
     setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
     setNotes(RECOVERED_PROJECT.notes || '');
-    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_maestro_exact_v5');
+    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_final_9180k_v6');
     localStorage.setItem('pom_current_budget', JSON.stringify(RECOVERED_PROJECT));
-    showToast('¡Presupuesto actualizado con el desglose exacto del maestro ($6.750.000)!', 'success');
+    showToast('¡Presupuesto actualizado: Total exacto $9.180.000 con margen ya incluido!', 'success');
   };
 
   // Auto-sync exact maestro budget on mount if revision changed
   useEffect(() => {
-    const CURRENT_REV = 'rev_2026_09_28_maestro_exact_v5';
+    const CURRENT_REV = 'rev_2026_09_28_final_9180k_v6';
     const storedRev = localStorage.getItem('pom_project_revision');
     if (storedRev !== CURRENT_REV && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
       handleLoadMaestroBudget();
@@ -421,10 +421,10 @@ export default function App() {
           <span style={{ fontSize: '1.25rem' }}>⚡</span>
           <div>
             <strong style={{ color: '#166534', fontSize: '0.88rem' }}>
-              Cotización del Maestro ($6.750.000): 11 recintos cuadrados y detallados
+              Presupuesto Todo Incluido ($9.180.000): Margen proporcional ya integrado en cada partida
             </strong>
             <div style={{ fontSize: '0.76rem', color: '#15803d' }}>
-              Detalle exacto según la imagen del maestro listo para generar PDF o editar si el cliente quita servicios.
+              Cada partida incluye el costo y la utilidad. No aparece ítem extra de recargo ni margen por separado.
             </div>
           </div>
         </div>
@@ -434,7 +434,7 @@ export default function App() {
           onClick={handleLoadMaestroBudget}
           style={{ backgroundColor: '#16a34a', color: 'white', fontWeight: '700', border: 'none', padding: '0.45rem 1rem' }}
         >
-          Recargar Detalle Maestro ($6.75M)
+          Recargar $9.180.000
         </button>
       </div>
 

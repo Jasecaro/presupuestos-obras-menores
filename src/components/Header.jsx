@@ -30,7 +30,7 @@ export default function Header({
               type="button"
               className="btn btn-secondary btn-sm"
               onClick={onLoadMaestroBudget}
-              title="Cargar y sincronizar el desglose exacto de la cotización del maestro ($6.750.000)"
+              title="Cargar presupuesto proporcional con margen incluido ($9.180.000 total)"
               style={{
                 borderColor: '#2563eb',
                 backgroundColor: 'rgba(37, 99, 235, 0.08)',
@@ -38,7 +38,7 @@ export default function Header({
                 fontWeight: '700'
               }}
             >
-              <span>⚡ Cargar Detalle Maestro ($6.75M)</span>
+              <span>⚡ Cargar Presupuesto ($9.18M)</span>
             </button>
           )}
 
