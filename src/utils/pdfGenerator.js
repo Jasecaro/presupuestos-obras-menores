@@ -427,6 +427,241 @@ function generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHei
 }
 
 /**
+ * Generates the Intermediate / Medium Budget PDF (Focuses on Item Titles and Subtotals only, without m² or unit prices)
+ */
+function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin) {
+  const { client, spaces = [], financials, notes } = budgetData;
+  const contractor = contractorData || {};
+
+  let currentY = renderHeader(doc, {
+    client,
+    contractor,
+    title: 'PRESUPUESTO DE OBRAS',
+    margin,
+    pageWidth
+  });
+
+  // Summary Metrics Bar
+  const metricsBarHeight = 10;
+  doc.setFillColor(238, 242, 255);
+  doc.setDrawColor(199, 210, 254);
+  doc.roundedRect(margin, currentY, pageWidth - (margin * 2), metricsBarHeight, 2, 2, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(...PRIMARY_COLOR);
+
+  const totalSpaces = spaces.length;
+
+  doc.text('Resumen General del Proyecto:', margin + 4, currentY + 6.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...DARK_COLOR);
+
+  const generalSummary = `${totalSpaces} Recinto(s) / Áreas presupuestadas con detalle de partidas y valores acordados`;
+  doc.text(generalSummary, margin + 48, currentY + 6.5);
+
+  currentY += metricsBarHeight + 5;
+
+  // Render Table for each room / space
+  spaces.forEach((space, index) => {
+    const metrics = calculateSpaceMetrics(space);
+    const items = space.items || [];
+
+    const spaceSubtotal = items.reduce((sum, item) => sum + calculateItemSubtotal(item, metrics), 0);
+
+    // Header info for the space: Space name + Subtotal Recinto (NO measurements / surfaces)
+    const spaceHeader = [
+      [
+        {
+          content: `${index + 1}. ${space.name.toUpperCase()}`,
+          styles: { fontStyle: 'bold', fillColor: PRIMARY_COLOR, textColor: [255, 255, 255], fontSize: 8.5 }
+        },
+        {
+          content: `Subtotal Recinto: ${formatCurrency(spaceSubtotal)}`,
+          styles: { halign: 'right', fontStyle: 'bold', fillColor: PRIMARY_COLOR, textColor: [255, 255, 255], fontSize: 8 }
+        }
+      ]
+    ];
+
+    autoTable(doc, {
+      startY: currentY,
+      margin: { left: margin, right: margin },
+      body: spaceHeader,
+      theme: 'plain',
+      tableWidth: 'auto',
+      columnStyles: {
+        0: { cellWidth: 110 },
+        1: { cellWidth: 'auto' }
+      },
+      styles: {
+        cellPadding: 2.2
+      }
+    });
+
+    currentY = doc.lastAutoTable.finalY;
+
+    // Items table for this space: ONLY Item title and Subtotal (NO secondary description, NO qty, NO m², NO unitPrice)
+    const tableBody = items.map((item, itemIdx) => {
+      const subtotal = calculateItemSubtotal(item, metrics);
+
+      return [
+        `${itemIdx + 1}`,
+        { content: item.name, styles: { fontStyle: 'normal' } },
+        { content: formatCurrency(subtotal), styles: { halign: 'right', fontStyle: 'bold' } }
+      ];
+    });
+
+    if (tableBody.length === 0) {
+      tableBody.push([
+        '-',
+        'Sin partidas específicas agregadas para este recinto',
+        { content: '$ 0', styles: { halign: 'right' } }
+      ]);
+    }
+
+    autoTable(doc, {
+      startY: currentY,
+      margin: { left: margin, right: margin },
+      head: [['#', 'Descripción de Partida / Trabajo', 'Subtotal']],
+      body: tableBody,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [51, 65, 85],
+        textColor: [255, 255, 255],
+        fontSize: 8,
+        fontStyle: 'bold',
+        cellPadding: 2.2
+      },
+      bodyStyles: {
+        fontSize: 8,
+        textColor: DARK_COLOR,
+        cellPadding: 2.5,
+        lineColor: BORDER_COLOR
+      },
+      alternateRowStyles: {
+        fillColor: ACCENT_ROW
+      },
+      columnStyles: {
+        0: { cellWidth: 10, halign: 'center' },
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 38, halign: 'right' }
+      },
+      pageBreak: 'auto'
+    });
+
+    currentY = doc.lastAutoTable.finalY + 4;
+  });
+
+  const exclusions = budgetData.exclusions || [];
+  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4));
+
+  // Check if we have enough space for totals, terms, exclusions and signature, else add page
+  if (currentY > pageHeight - requiredBottomHeight) {
+    doc.addPage();
+    currentY = margin + 5;
+  }
+
+  // Financials & Totals Box (Right) + Terms (Left)
+  const totalsBoxWidth = 80;
+  const totalsBoxX = pageWidth - margin - totalsBoxWidth;
+  const notesWidth = pageWidth - margin * 2 - totalsBoxWidth - 8;
+
+  // Notes & Terms on the left
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(...PRIMARY_COLOR);
+  doc.text('CONDICIONES COMERCIALES Y FORMA DE PAGO', margin, currentY + 3);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...DARK_COLOR);
+
+  let noteY = currentY + 7.5;
+  const paymentText = contractor.paymentTerms || '50% anticipo al inicio, 30% avance y 20% contra recepción conforme.';
+  const splitPayment = doc.splitTextToSize(`• Forma de Pago: ${paymentText}`, notesWidth);
+  doc.text(splitPayment, margin, noteY);
+  noteY += splitPayment.length * 3.5 + 1;
+
+  const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';
+  const workDaysText = client.estimatedWorkDays ? `${client.estimatedWorkDays} ${workDaysLabel}` : 'A convenir';
+  const splitTime = doc.splitTextToSize(`• Plazo de Ejecución: ${workDaysText}`, notesWidth);
+  doc.text(splitTime, margin, noteY);
+  noteY += splitTime.length * 3.5 + 1;
+
+  const warrantyText = contractor.warranty || 'Garantía legal sobre mano de obra ejecutada.';
+  const splitWarranty = doc.splitTextToSize(`• Garantía: ${warrantyText}`, notesWidth);
+  doc.text(splitWarranty, margin, noteY);
+  noteY += splitWarranty.length * 3.5 + 1;
+
+  if (notes) {
+    const customNotes = doc.splitTextToSize(`• Observaciones: ${notes}`, notesWidth);
+    doc.text(customNotes, margin, noteY);
+    noteY += customNotes.length * 3.5 + 1;
+  }
+
+  // Exclusions (Lo que NO incluye)
+  if (exclusions.length > 0) {
+    noteY += 1;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.8);
+    doc.setTextColor(220, 38, 38);
+    doc.text('NO INCLUYE (EXCLUSIONES DE OBRA):', margin, noteY);
+    noteY += 3.8;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.2);
+    doc.setTextColor(...DARK_COLOR);
+    exclusions.forEach(ex => {
+      const splitEx = doc.splitTextToSize(`• ${ex}`, notesWidth);
+      doc.text(splitEx, margin, noteY);
+      noteY += splitEx.length * 3.2 + 0.4;
+    });
+  }
+
+  // Totals Table on the right
+  const totalsRows = [];
+  if (financials?.overheadAmount > 0) {
+    totalsRows.push(['Costo Directo Obras:', formatCurrency(financials?.directCost || 0)]);
+    totalsRows.push([`Gastos Generales / Utilidad (${financials.overheadPercent}%):`, formatCurrency(financials.overheadAmount)]);
+  }
+  if (financials?.discountAmount > 0) {
+    totalsRows.push([`Descuento Especial (${financials.discountPercent}%):`, `-${formatCurrency(financials.discountAmount)}`]);
+  }
+  totalsRows.push(['Subtotal Neto:', formatCurrency(financials?.netSubtotal || financials?.grandTotal || 0)]);
+
+  if (financials?.applyTax) {
+    totalsRows.push([`IVA (${financials.taxRate}%):`, formatCurrency(financials.taxAmount)]);
+    totalsRows.push(['TOTAL PRESUPUESTO:', formatCurrency(financials?.grandTotal || 0)]);
+  } else {
+    totalsRows.push(['TOTAL PRESUPUESTO:', formatCurrency(financials?.grandTotal || 0)]);
+  }
+
+  autoTable(doc, {
+    startY: currentY,
+    margin: { left: totalsBoxX },
+    body: totalsRows,
+    theme: 'plain',
+    tableWidth: totalsBoxWidth,
+    styles: {
+      cellPadding: 2,
+      fontSize: 8,
+      lineColor: BORDER_COLOR,
+      lineWidth: { bottom: 0.3 },
+      textColor: DARK_COLOR
+    },
+    columnStyles: {
+      0: { cellWidth: 46, halign: 'left' },
+      1: { cellWidth: 34, halign: 'right', fontStyle: 'bold' }
+    }
+  });
+
+  currentY = Math.max(noteY + 6, doc.lastAutoTable.finalY + 8);
+
+  renderSignatures(doc, { contractor, client, currentY, margin, pageWidth, pageHeight });
+  renderFooters(doc, pageWidth, pageHeight, 'Presupuesto de Obras  •  Sistema de Obras Menores');
+}
+
+/**
  * Generates the Minimalist / Summary Budget PDF (Focuses only on Scope of Work and Total)
  */
 function generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin) {
@@ -648,12 +883,15 @@ export function generateBudgetPDF(budgetData, contractorData, options = { mode: 
 
   if (mode === 'minimal') {
     generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
-  } else {
+  } else if (mode === 'detailed') {
     generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
+  } else {
+    // Default or 'medium'
+    generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
   }
 
   if (options.download) {
-    const prefix = mode === 'minimal' ? 'Resumen_Presupuesto' : 'Presupuesto_Detallado';
+    const prefix = mode === 'minimal' ? 'Resumen_Presupuesto' : mode === 'detailed' ? 'Presupuesto_Detallado' : 'Presupuesto_Subtotales';
     const cleanClient = (client.name || 'Cliente')
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')

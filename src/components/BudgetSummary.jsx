@@ -171,15 +171,27 @@ export default function BudgetSummary({
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
-          {/* Minimalist Summary PDF Download Button */}
+          {/* Medium Intermediate PDF Download Button */}
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() => onDownloadPdf('minimal')}
+            onClick={() => onDownloadPdf('medium')}
             style={{ width: '100%', justifyContent: 'center', fontWeight: '700' }}
+            title="Descargar versión media (partidas con subtotales, sin m² ni precios unitarios)"
+          >
+            <FileText size={16} />
+            <span>Descargar Versión Media (Subtotales)</span>
+          </button>
+
+          {/* Minimalist Summary PDF Download Button */}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => onDownloadPdf('minimal')}
+            style={{ width: '100%', justifyContent: 'center' }}
             title="Descargar versión resumen (solo alcance de trabajos y total)"
           >
-            <Sparkles size={16} />
+            <Sparkles size={15} />
             <span>Descargar Versión Minimalista</span>
           </button>
 

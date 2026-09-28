@@ -384,7 +384,7 @@ export default function App() {
     generateBudgetPDF(currentBudgetData, contractor, { mode, download: true });
   };
 
-  const handleOpenPdfPreview = (mode = 'minimal') => {
+  const handleOpenPdfPreview = (mode = 'medium') => {
     setPdfPreviewMode(mode);
     setShowPdfPreviewModal(true);
   };
@@ -396,7 +396,7 @@ export default function App() {
         onOpenContractorModal={() => setShowContractorModal(true)}
         onOpenPricesModal={() => setShowPricesModal(true)}
         onOpenSavedModal={() => setShowSavedModal(true)}
-        onOpenPdfPreview={() => handleOpenPdfPreview('minimal')}
+        onOpenPdfPreview={() => handleOpenPdfPreview('medium')}
         onDirectDownloadPdf={handleDirectDownloadPdf}
         onLoadMaestroBudget={handleLoadMaestroBudget}
         spacesCount={spaces.length}
@@ -511,7 +511,7 @@ export default function App() {
               onUpdateFinancialSettings={setFinancialSettings}
               onUpdateNotes={setNotes}
               onSaveBudget={handleSaveBudget}
-              onOpenPdfPreview={() => handleOpenPdfPreview('minimal')}
+              onOpenPdfPreview={() => handleOpenPdfPreview('medium')}
               onDownloadPdf={handleDirectDownloadPdf}
             />
           </div>

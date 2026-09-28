@@ -84,11 +84,17 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
             <button
               type="button"
               className="btn btn-primary btn-sm"
-              onClick={() => handleDownload(activeTab === 'whatsapp' ? 'minimal' : activeTab)}
+              onClick={() => handleDownload(activeTab === 'whatsapp' ? 'medium' : activeTab)}
               title="Descargar versión en PDF"
             >
               <Download size={15} />
-              <span>{activeTab === 'minimal' ? 'Descargar Resumido (PDF)' : activeTab === 'detailed' ? 'Descargar Detallado (PDF)' : 'Descargar PDF'}</span>
+              <span>
+                {activeTab === 'minimal' 
+                  ? 'Descargar Minimalista (PDF)' 
+                  : activeTab === 'detailed' 
+                  ? 'Descargar Detallado (PDF)' 
+                  : 'Descargar Versión Media (PDF)'}
+              </span>
             </button>
             <button type="button" className="btn btn-ghost btn-sm" onClick={onClose}>
               <X size={20} />
@@ -101,13 +107,26 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
           <div className="tabs-nav" style={{ margin: 0, borderBottom: 'none' }}>
             <button
               type="button"
+              className={`tab-btn ${activeTab === 'medium' ? 'active' : ''}`}
+              onClick={() => setActiveTab('medium')}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <FileText size={16} color={activeTab === 'medium' ? 'var(--primary)' : 'inherit'} />
+              <span>Versión Media (Subtotales)</span>
+              <span className="badge" style={{ backgroundColor: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', fontSize: '0.68rem', padding: '0.15rem 0.45rem', fontWeight: '700' }}>
+                Recomendada (Sin m² ni P.U.)
+              </span>
+            </button>
+
+            <button
+              type="button"
               className={`tab-btn ${activeTab === 'minimal' ? 'active' : ''}`}
               onClick={() => setActiveTab('minimal')}
               style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
             >
               <Sparkles size={16} color={activeTab === 'minimal' ? 'var(--primary)' : 'inherit'} />
-              <span>Versión Minimalista / Resumida</span>
-              <span className="badge" style={{ backgroundColor: 'var(--primary-subtle)', color: 'var(--primary)', fontSize: '0.68rem', padding: '0.15rem 0.45rem' }}>
+              <span>Versión Minimalista</span>
+              <span className="badge" style={{ backgroundColor: 'var(--bg-card-subtle)', color: 'var(--text-secondary)', fontSize: '0.68rem', padding: '0.15rem 0.45rem' }}>
                 Solo Trabajos + Total
               </span>
             </button>
@@ -119,7 +138,7 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
               style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
             >
               <Layers size={16} color={activeTab === 'detailed' ? 'var(--primary)' : 'inherit'} />
-              <span>Versión Detallada (Completa)</span>
+              <span>Versión Detallada</span>
               <span className="badge" style={{ backgroundColor: 'var(--bg-card-subtle)', color: 'var(--text-secondary)', fontSize: '0.68rem', padding: '0.15rem 0.45rem' }}>
                 Desglose m² y P.U.
               </span>

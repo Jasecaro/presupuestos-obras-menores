@@ -95,11 +95,11 @@ export default function Header({
           <button
             type="button"
             className="btn btn-primary btn-sm"
-            onClick={() => onDirectDownloadPdf('minimal')}
-            title="Descargar presupuesto resumen en PDF (versión minimalista)"
+            onClick={() => onDirectDownloadPdf('medium')}
+            title="Descargar presupuesto en PDF (versión media: partidas y subtotales, sin m² ni P.U.)"
           >
             <Download size={16} />
-            <span>Descargar Resumen</span>
+            <span>Descargar PDF (Medio)</span>
           </button>
         </div>
       </div>
