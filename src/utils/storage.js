@@ -126,7 +126,7 @@ export function savePriceCatalog(catalog) {
 }
 
 const CURRENT_PROJECT_REVISION_KEY = 'pom_project_revision';
-const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_final_9180k_v6';
+const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_unified_electric_9180k_v7';
 
 export function loadCurrentBudget() {
   try {

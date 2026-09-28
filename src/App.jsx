@@ -113,14 +113,14 @@ export default function App() {
     setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
     setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
     setNotes(RECOVERED_PROJECT.notes || '');
-    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_final_9180k_v6');
+    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_unified_electric_9180k_v7');
     localStorage.setItem('pom_current_budget', JSON.stringify(RECOVERED_PROJECT));
-    showToast('¡Presupuesto actualizado: Total exacto $9.180.000 con margen ya incluido!', 'success');
+    showToast('¡Presupuesto actualizado: Eléctricos unificados y total exacto $9.180.000!', 'success');
   };
 
   // Auto-sync exact maestro budget on mount if revision changed
   useEffect(() => {
-    const CURRENT_REV = 'rev_2026_09_28_final_9180k_v6';
+    const CURRENT_REV = 'rev_2026_09_28_unified_electric_9180k_v7';
     const storedRev = localStorage.getItem('pom_project_revision');
     if (storedRev !== CURRENT_REV && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
       handleLoadMaestroBudget();

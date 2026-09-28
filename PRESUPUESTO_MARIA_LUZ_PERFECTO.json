@@ -47,10 +47,10 @@
           "id": "item_gen_reparacion_puertas",
           "name": "Reparación de 6 puertas interiores",
           "description": "Ajuste de bisagras, cerraduras, rebaje y cuadratura",
-          "unit": "un",
+          "unit": "gl",
           "unitType": "fixed",
-          "quantity": 6,
-          "unitPrice": 18133.33,
+          "quantity": 1,
+          "unitPrice": 108800,
           "category": "Mobiliario, Closets y Carpintería"
         },
         {
@@ -119,20 +119,20 @@
           "id": "item_liv_retiro_parquet",
           "name": "Retiro de Parquet existente (21 m²)",
           "description": "Desmonte cuidadoso de entablado de parquet, despeje y acopio de material",
-          "unit": "m²",
+          "unit": "gl",
           "unitType": "fixed",
-          "quantity": 21,
-          "unitPrice": 9714.29,
+          "quantity": 1,
+          "unitPrice": 204000,
           "category": "Pisos y Revestimientos"
         },
         {
           "id": "item_liv_instalacion_ceramica",
           "name": "Instalación de Cerámica de Piso (21 m²)",
           "description": "Incluye adhesivo cerámico bekron, fragüe, nivelación y colocación",
-          "unit": "m²",
+          "unit": "gl",
           "unitType": "fixed",
-          "quantity": 21,
-          "unitPrice": 35619.05,
+          "quantity": 1,
+          "unitPrice": 748000,
           "category": "Pisos y Revestimientos"
         },
         {
@@ -147,22 +147,12 @@
         },
         {
           "id": "item_liv_puntos_electricos",
-          "name": "Instalación de Puntos Eléctricos (6 enchufes + 4 centros de luz)",
-          "description": "Montaje de 6 módulos dobles de enchufes y 4 centros de iluminación",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 10,
-          "unitPrice": 21760,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_liv_canalizacion_cables",
-          "name": "Canalización eléctrica, cableado normalizado, cajas y tapas SEC",
-          "description": "Conductores certificados fase/neutro/tierra, cajas de derivación y tapas normalizadas",
+          "name": "Puntos eléctricos (6 enchufes + 4 centros de luz), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 108800,
+          "unitPrice": 326400,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -199,22 +189,12 @@
         },
         {
           "id": "item_pas_puntos_electricos",
-          "name": "Puntos Eléctricos (2 enchufes + 2 centros de luz + 1 interruptor)",
-          "description": "Renovación y montaje de módulos eléctricos certificados",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 5,
-          "unitPrice": 32640,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_pas_canalizacion",
-          "name": "Canalización y Cableado Eléctrico con materiales",
-          "description": "Tendido eléctrico normado, cajas y fijaciones",
+          "name": "Puntos eléctricos (2 enchufes + 2 centros de luz + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 54400,
+          "unitPrice": 217600,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -251,22 +231,12 @@
         },
         {
           "id": "item_coc_puntos_electricos",
-          "name": "Puntos Eléctricos (2 enchufes + módulo de encendido + 1 centro luz)",
-          "description": "Módulos de alta exigencia para electrodomésticos y módulo de encendido",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 4,
-          "unitPrice": 47600,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_coc_canalizacion",
-          "name": "Canalización, cableado y montaje eléctrico de cocina",
-          "description": "Conductores certificados y cajas embutidas",
+          "name": "Puntos eléctricos (2 enchufes + módulo encendido + 1 centro luz), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 108800,
+          "unitPrice": 299200,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -397,22 +367,12 @@
         },
         {
           "id": "item_d2p1_puntos_electricos",
-          "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-          "description": "Módulos y placas normalizadas SEC",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 3,
-          "unitPrice": 54400,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_d2p1_canalizacion",
-          "name": "Electricidad picada nueva, canalizado, cables y cajas",
-          "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 108800,
+          "unitPrice": 272000,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -449,22 +409,12 @@
         },
         {
           "id": "item_d2p2_puntos_electricos",
-          "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-          "description": "Módulos y placas normalizadas SEC",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 3,
-          "unitPrice": 54400,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_d2p2_canalizacion",
-          "name": "Electricidad picada nueva, canalizado, cables y cajas",
-          "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 108800,
+          "unitPrice": 272000,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -501,22 +451,12 @@
         },
         {
           "id": "item_d2p3_puntos_electricos",
-          "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-          "description": "Módulos y placas normalizadas SEC",
-          "unit": "pto",
-          "unitType": "fixed",
-          "quantity": 3,
-          "unitPrice": 54400,
-          "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_d2p3_canalizacion",
-          "name": "Electricidad picada nueva, canalizado, cables y cajas",
-          "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 108800,
+          "unitPrice": 272000,
           "category": "Instalaciones Eléctricas"
         }
       ]
@@ -694,10 +634,10 @@
             "id": "item_gen_reparacion_puertas",
             "name": "Reparación de 6 puertas interiores",
             "description": "Ajuste de bisagras, cerraduras, rebaje y cuadratura",
-            "unit": "un",
+            "unit": "gl",
             "unitType": "fixed",
-            "quantity": 6,
-            "unitPrice": 18133.33,
+            "quantity": 1,
+            "unitPrice": 108800,
             "category": "Mobiliario, Closets y Carpintería"
           },
           {
@@ -767,20 +707,20 @@
             "id": "item_liv_retiro_parquet",
             "name": "Retiro de Parquet existente (21 m²)",
             "description": "Desmonte cuidadoso de entablado de parquet, despeje y acopio de material",
-            "unit": "m²",
+            "unit": "gl",
             "unitType": "fixed",
-            "quantity": 21,
-            "unitPrice": 9714.29,
+            "quantity": 1,
+            "unitPrice": 204000,
             "category": "Pisos y Revestimientos"
           },
           {
             "id": "item_liv_instalacion_ceramica",
             "name": "Instalación de Cerámica de Piso (21 m²)",
             "description": "Incluye adhesivo cerámico bekron, fragüe, nivelación y colocación",
-            "unit": "m²",
+            "unit": "gl",
             "unitType": "fixed",
-            "quantity": 21,
-            "unitPrice": 35619.05,
+            "quantity": 1,
+            "unitPrice": 748000,
             "category": "Pisos y Revestimientos"
           },
           {
@@ -795,22 +735,12 @@
           },
           {
             "id": "item_liv_puntos_electricos",
-            "name": "Instalación de Puntos Eléctricos (6 enchufes + 4 centros de luz)",
-            "description": "Montaje de 6 módulos dobles de enchufes y 4 centros de iluminación",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 10,
-            "unitPrice": 21760,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_liv_canalizacion_cables",
-            "name": "Canalización eléctrica, cableado normalizado, cajas y tapas SEC",
-            "description": "Conductores certificados fase/neutro/tierra, cajas de derivación y tapas normalizadas",
+            "name": "Puntos eléctricos (6 enchufes + 4 centros de luz), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 108800,
+            "unitPrice": 326400,
             "category": "Instalaciones Eléctricas"
           }
         ],
@@ -848,22 +778,12 @@
           },
           {
             "id": "item_pas_puntos_electricos",
-            "name": "Puntos Eléctricos (2 enchufes + 2 centros de luz + 1 interruptor)",
-            "description": "Renovación y montaje de módulos eléctricos certificados",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 5,
-            "unitPrice": 32640,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_pas_canalizacion",
-            "name": "Canalización y Cableado Eléctrico con materiales",
-            "description": "Tendido eléctrico normado, cajas y fijaciones",
+            "name": "Puntos eléctricos (2 enchufes + 2 centros de luz + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 54400,
+            "unitPrice": 217600,
             "category": "Instalaciones Eléctricas"
           }
         ],
@@ -901,22 +821,12 @@
           },
           {
             "id": "item_coc_puntos_electricos",
-            "name": "Puntos Eléctricos (2 enchufes + módulo de encendido + 1 centro luz)",
-            "description": "Módulos de alta exigencia para electrodomésticos y módulo de encendido",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 4,
-            "unitPrice": 47600,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_coc_canalizacion",
-            "name": "Canalización, cableado y montaje eléctrico de cocina",
-            "description": "Conductores certificados y cajas embutidas",
+            "name": "Puntos eléctricos (2 enchufes + módulo encendido + 1 centro luz), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 108800,
+            "unitPrice": 299200,
             "category": "Instalaciones Eléctricas"
           }
         ],
@@ -1050,22 +960,12 @@
           },
           {
             "id": "item_d2p1_puntos_electricos",
-            "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-            "description": "Módulos y placas normalizadas SEC",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 3,
-            "unitPrice": 54400,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_d2p1_canalizacion",
-            "name": "Electricidad picada nueva, canalizado, cables y cajas",
-            "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 108800,
+            "unitPrice": 272000,
             "category": "Instalaciones Eléctricas"
           }
         ],
@@ -1103,22 +1003,12 @@
           },
           {
             "id": "item_d2p2_puntos_electricos",
-            "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-            "description": "Módulos y placas normalizadas SEC",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 3,
-            "unitPrice": 54400,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_d2p2_canalizacion",
-            "name": "Electricidad picada nueva, canalizado, cables y cajas",
-            "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 108800,
+            "unitPrice": 272000,
             "category": "Instalaciones Eléctricas"
           }
         ],
@@ -1156,22 +1046,12 @@
           },
           {
             "id": "item_d2p3_puntos_electricos",
-            "name": "Puntos Eléctricos (2 enchufes + 1 interruptor)",
-            "description": "Módulos y placas normalizadas SEC",
-            "unit": "pto",
-            "unitType": "fixed",
-            "quantity": 3,
-            "unitPrice": 54400,
-            "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_d2p3_canalizacion",
-            "name": "Electricidad picada nueva, canalizado, cables y cajas",
-            "description": "Picado de muros, embutido de tuberías conduit y cableado certificado",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 108800,
+            "unitPrice": 272000,
             "category": "Instalaciones Eléctricas"
           }
         ],
