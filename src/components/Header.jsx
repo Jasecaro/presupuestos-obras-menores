@@ -8,6 +8,7 @@ export default function Header({
   onOpenSavedModal,
   onOpenPdfPreview,
   onDirectDownloadPdf,
+  onLoadMaestroBudget,
   spacesCount = 0
 }) {
   return (
@@ -24,6 +25,23 @@ export default function Header({
         </div>
 
         <div className="header-actions">
+          {onLoadMaestroBudget && (
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={onLoadMaestroBudget}
+              title="Cargar y sincronizar el desglose exacto de la cotización del maestro ($6.750.000)"
+              style={{
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.08)',
+                color: '#2563eb',
+                fontWeight: '700'
+              }}
+            >
+              <span>⚡ Cargar Detalle Maestro ($6.75M)</span>
+            </button>
+          )}
+
           <button
             type="button"
             className="btn btn-secondary btn-sm"

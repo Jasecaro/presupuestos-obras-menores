@@ -105,6 +105,28 @@ export default function App() {
     saveCurrentBudget(currentBudgetData);
   }, [currentBudgetData]);
 
+  // Handler to force reload the maestro exact budget
+  const handleLoadMaestroBudget = () => {
+    if (!RECOVERED_PROJECT) return;
+    setClient({ ...RECOVERED_PROJECT.client });
+    setSpaces([...RECOVERED_PROJECT.spaces]);
+    setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
+    setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
+    setNotes(RECOVERED_PROJECT.notes || '');
+    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_maestro_exact_v5');
+    localStorage.setItem('pom_current_budget', JSON.stringify(RECOVERED_PROJECT));
+    showToast('¡Presupuesto actualizado con el desglose exacto del maestro ($6.750.000)!', 'success');
+  };
+
+  // Auto-sync exact maestro budget on mount if revision changed
+  useEffect(() => {
+    const CURRENT_REV = 'rev_2026_09_28_maestro_exact_v5';
+    const storedRev = localStorage.getItem('pom_project_revision');
+    if (storedRev !== CURRENT_REV && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
+      handleLoadMaestroBudget();
+    }
+  }, []);
+
   // Sync latest catalog additions
   useEffect(() => {
     setPriceCatalog(loadPriceCatalog());
@@ -376,8 +398,45 @@ export default function App() {
         onOpenSavedModal={() => setShowSavedModal(true)}
         onOpenPdfPreview={() => handleOpenPdfPreview('minimal')}
         onDirectDownloadPdf={handleDirectDownloadPdf}
+        onLoadMaestroBudget={handleLoadMaestroBudget}
         spacesCount={spaces.length}
       />
+
+      {/* Sync bar for maestro budget */}
+      <div style={{
+        maxWidth: '1480px',
+        margin: '0.75rem auto 0 auto',
+        padding: '0.65rem 1.25rem',
+        backgroundColor: '#f0fdf4',
+        border: '1px solid #86efac',
+        borderRadius: 'var(--radius-md)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '0.75rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <span style={{ fontSize: '1.25rem' }}>⚡</span>
+          <div>
+            <strong style={{ color: '#166534', fontSize: '0.88rem' }}>
+              Cotización del Maestro ($6.750.000): 11 recintos cuadrados y detallados
+            </strong>
+            <div style={{ fontSize: '0.76rem', color: '#15803d' }}>
+              Detalle exacto según la imagen del maestro listo para generar PDF o editar si el cliente quita servicios.
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="btn btn-sm"
+          onClick={handleLoadMaestroBudget}
+          style={{ backgroundColor: '#16a34a', color: 'white', fontWeight: '700', border: 'none', padding: '0.45rem 1rem' }}
+        >
+          Recargar Detalle Maestro ($6.75M)
+        </button>
+      </div>
 
       {client.name !== 'María Luz Camus Romo' && (
         <div style={{
