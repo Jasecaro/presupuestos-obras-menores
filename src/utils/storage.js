@@ -26,7 +26,8 @@ export const getCleanStarterBudget = () => ({
     date: new Date().toISOString().split('T')[0],
     validityDays: 15,
     estimatedWorkDays: 5,
-    workDaysType: 'hábiles'
+    workDaysType: 'hábiles',
+    includesMaterials: true
   },
   spaces: [],
   financialSettings: {

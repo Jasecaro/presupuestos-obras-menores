@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
-import { User, MapPin, Calendar, Clock, ChevronDown, ChevronUp, Hash } from 'lucide-react';
+import { 
+  User, 
+  MapPin, 
+  Calendar, 
+  Clock, 
+  ChevronDown, 
+  ChevronUp, 
+  Hash, 
+  Package, 
+  FileText, 
+  CheckCircle2, 
+  AlertCircle,
+  Plus
+} from 'lucide-react';
 
-export default function ClientInfoForm({ client, onChange }) {
+export default function ClientInfoForm({ client, onChange, notes, onUpdateNotes }) {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const handleFieldChange = (field, value) => {
@@ -9,6 +22,26 @@ export default function ClientInfoForm({ client, onChange }) {
       ...client,
       [field]: value
     });
+  };
+
+  const includesMaterials = client.includesMaterials !== false;
+
+  const quickObservations = [
+    'Presupuesto integral a todo costo: Incluye mano de obra especializada y materiales básicos según especificaciones acordadas en terreno.',
+    '50% de anticipo para ejecución del trabajo y compra de materiales iniciales; saldo contra avances convenidos y recepción conforme.',
+    'Superficies y canalizaciones sujetas a revisión tras despeje e inspección inicial.',
+    'Materiales e insumos acopiados en faena bajo resguardo del mandante.',
+    'Incluye aseo básico y despeje final de áreas intervenidas.',
+    'Trabajos a realizar en horario hábil coordinado de común acuerdo.'
+  ];
+
+  const handleAddObservation = (text) => {
+    if (!onUpdateNotes) return;
+    if (!notes || notes.trim() === '') {
+      onUpdateNotes(text);
+    } else if (!notes.includes(text)) {
+      onUpdateNotes(`${notes.trim()}\n• ${text}`);
+    }
   };
 
   return (
@@ -24,7 +57,7 @@ export default function ClientInfoForm({ client, onChange }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            {client.name || 'Sin cliente'} • {client.quoteNumber || 'PTO-001'}
+            {client.name || 'Sin cliente'} • {client.quoteNumber || 'PTO-001'} • {includesMaterials ? 'Con Materiales' : 'Solo M.O.'}
           </span>
           <button
             type="button"
@@ -39,6 +72,7 @@ export default function ClientInfoForm({ client, onChange }) {
 
       {isExpanded && (
         <div style={{ animation: 'fadeIn 0.2s ease' }}>
+          {/* Fila 1: Datos Cliente */}
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">
@@ -77,7 +111,8 @@ export default function ClientInfoForm({ client, onChange }) {
             </div>
           </div>
 
-          <div className="form-grid-4">
+          {/* Fila 2: Dirección y Folio */}
+          <div className="form-grid-4" style={{ marginTop: '0.85rem' }}>
             <div className="form-group" style={{ gridColumn: 'span 2' }}>
               <label className="form-label">
                 <MapPin size={14} />
@@ -118,7 +153,8 @@ export default function ClientInfoForm({ client, onChange }) {
             </div>
           </div>
 
-          <div className="form-grid-3">
+          {/* Fila 3: Fechas y Plazos */}
+          <div className="form-grid-3" style={{ marginTop: '0.85rem' }}>
             <div className="form-group">
               <label className="form-label">
                 <Calendar size={14} />
@@ -169,6 +205,138 @@ export default function ClientInfoForm({ client, onChange }) {
                   <option value="hábiles">días hábiles</option>
                   <option value="corridos">días corridos</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Fila 4: Opción ¿Incluye Materiales? (Checkbox destacado) */}
+          <div
+            style={{
+              marginTop: '1.2rem',
+              padding: '0.85rem 1rem',
+              borderRadius: '8px',
+              border: `1.5px solid ${includesMaterials ? '#86efac' : '#fca5a5'}`,
+              backgroundColor: includesMaterials ? '#f0fdf4' : '#fef2f2',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              flexWrap: 'wrap'
+            }}
+          >
+            <label
+              htmlFor="toggle-includes-materials"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                cursor: 'pointer',
+                userSelect: 'none',
+                margin: 0
+              }}
+            >
+              <input
+                type="checkbox"
+                id="toggle-includes-materials"
+                checked={includesMaterials}
+                onChange={(e) => handleFieldChange('includesMaterials', e.target.checked)}
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  accentColor: '#16a34a',
+                  cursor: 'pointer'
+                }}
+              />
+              <div>
+                <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#1e293b' }}>
+                  ¿El presupuesto incluye materiales?
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                  {includesMaterials
+                    ? 'Activado: Se incluirá la mención "Presupuesto Todo Incluido (M.O. + Materiales)" antes del detalle por recinto.'
+                    : 'Desactivado: Se indicará "Solo Mano de Obra (No incluye materiales)" antes del detalle por recinto.'}
+                </div>
+              </div>
+            </label>
+
+            <div
+              style={{
+                padding: '0.35rem 0.8rem',
+                borderRadius: '20px',
+                fontSize: '0.78rem',
+                fontWeight: '700',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                backgroundColor: includesMaterials ? '#dcfce7' : '#fee2e2',
+                color: includesMaterials ? '#15803d' : '#b91c1c',
+                border: `1px solid ${includesMaterials ? '#bbf7d0' : '#fecaca'}`
+              }}
+            >
+              {includesMaterials ? (
+                <>
+                  <CheckCircle2 size={14} />
+                  <span>TODO INCLUIDO (M.O. + Materiales)</span>
+                </>
+              ) : (
+                <>
+                  <AlertCircle size={14} />
+                  <span>SOLO MANO DE OBRA (Sin materiales)</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Fila 5: Observaciones (aparecen debajo de Forma de Pago en informes) */}
+          <div style={{ marginTop: '1.2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+              <label className="form-label" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <FileText size={15} color="var(--primary)" />
+                <span>Observaciones y Condiciones del Presupuesto:</span>
+              </label>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                Se imprimen debajo de la Forma de Pago
+              </span>
+            </div>
+
+            <textarea
+              className="form-textarea"
+              rows={3}
+              style={{ fontSize: '0.82rem', resize: 'vertical' }}
+              placeholder="Ej. Presupuesto integral a todo costo: Incluye mano de obra especializada y materiales básicos. 50% de anticipo para ejecución del trabajo y compra de materiales iniciales; saldo contra avances convenidos y recepción conforme."
+              value={notes || ''}
+              onChange={(e) => onUpdateNotes && onUpdateNotes(e.target.value)}
+            />
+
+            {/* Sugerencias rápidas para agregar cláusulas */}
+            <div style={{ marginTop: '0.45rem' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
+                + Agregar observación rápida:
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                {quickObservations.map((obs, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="btn btn-ghost btn-xs"
+                    style={{
+                      fontSize: '0.7rem',
+                      padding: '3px 8px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(0,0,0,0.04)',
+                      border: '1px solid rgba(0,0,0,0.08)',
+                      color: 'var(--text-main)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.2rem'
+                    }}
+                    title={obs}
+                    onClick={() => handleAddObservation(obs)}
+                  >
+                    <Plus size={11} />
+                    <span>{obs.slice(0, 40)}...</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>

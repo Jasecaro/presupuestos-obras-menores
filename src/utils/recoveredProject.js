@@ -10,7 +10,8 @@ export const RECOVERED_PROJECT = {
     "date": "2026-09-21",
     "validityDays": 15,
     "estimatedWorkDays": "50",
-    "workDaysType": "corridos"
+    "workDaysType": "corridos",
+    "includesMaterials": true
   },
   "spaces": [
     {

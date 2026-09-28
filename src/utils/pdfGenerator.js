@@ -170,6 +170,74 @@ function renderFooters(doc, pageWidth, pageHeight, label) {
 }
 
 /**
+ * Renders the Material Modality Banner before the room breakdown
+ */
+function renderModalityBanner(doc, includesMaterials, margin, currentY, contentWidth) {
+  const modalityHeight = 8;
+  const isIncluded = includesMaterials !== false;
+
+  if (isIncluded) {
+    // Soft emerald/green container
+    doc.setFillColor(240, 253, 244); // #f0fdf4
+    doc.setDrawColor(74, 222, 128); // #4ade80
+    doc.setLineWidth(0.35);
+    doc.roundedRect(margin, currentY, contentWidth, modalityHeight, 1.8, 1.8, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.8);
+    doc.setTextColor(22, 101, 52); // #166534
+    doc.text('MODALIDAD DEL PRESUPUESTO: TODO INCLUIDO (MANO DE OBRA Y MATERIALES INCLUIDOS)', margin + 4, currentY + 5.2);
+  } else {
+    // Soft amber/red container
+    doc.setFillColor(254, 242, 242); // #fef2f2
+    doc.setDrawColor(248, 113, 113); // #f87171
+    doc.setLineWidth(0.35);
+    doc.roundedRect(margin, currentY, contentWidth, modalityHeight, 1.8, 1.8, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.8);
+    doc.setTextColor(153, 27, 27); // #991b1b
+    doc.text('MODALIDAD DEL PRESUPUESTO: SOLO MANO DE OBRA (NO INCLUYE MATERIALES - POR CUENTA DEL CLIENTE)', margin + 4, currentY + 5.2);
+  }
+
+  return currentY + modalityHeight + 3.5;
+}
+
+/**
+ * Renders Observations directly below payment terms
+ */
+function renderObservationsBelowPayment(doc, notes, margin, startY, maxWidth) {
+  if (!notes || !notes.trim()) return startY;
+
+  let noteY = startY;
+  const cleanNotes = notes.trim();
+  const noteLines = cleanNotes.split('\n').map(l => l.trim()).filter(Boolean);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...DARK_COLOR);
+
+  if (noteLines.length <= 1) {
+    const customNotes = doc.splitTextToSize(`• Observaciones: ${cleanNotes}`, maxWidth);
+    doc.text(customNotes, margin, noteY);
+    noteY += customNotes.length * 3.5 + 1;
+  } else {
+    const obsHeader = doc.splitTextToSize('• Observaciones:', maxWidth);
+    doc.text(obsHeader, margin, noteY);
+    noteY += 3.5;
+    noteLines.forEach(nl => {
+      const bulletPrefix = nl.startsWith('•') || nl.startsWith('-') ? '' : '- ';
+      const splitLine = doc.splitTextToSize(`  ${bulletPrefix}${nl}`, maxWidth);
+      doc.text(splitLine, margin, noteY);
+      noteY += splitLine.length * 3.2 + 0.4;
+    });
+    noteY += 0.8;
+  }
+
+  return noteY;
+}
+
+/**
  * Generates the Detailed Budget PDF (Full breakdown with m² and unit prices)
  */
 function generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin) {
@@ -208,7 +276,10 @@ function generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHei
 
   doc.text(generalSummary, margin + 48, currentY + 6.5);
 
-  currentY += metricsBarHeight + 5;
+  currentY += metricsBarHeight + 3.5;
+
+  // Render Modality Banner before room breakdown
+  currentY = renderModalityBanner(doc, client.includesMaterials, margin, currentY, pageWidth - margin * 2);
 
   // Render Table for each room / space
   spaces.forEach((space, index) => {
@@ -321,7 +392,7 @@ function generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHei
   });
 
   const exclusions = budgetData.exclusions || [];
-  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4));
+  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4) + (notes ? 12 : 0));
 
   // Check if we have enough space for totals, terms, exclusions and signature, else add page
   if (currentY > pageHeight - requiredBottomHeight) {
@@ -350,16 +421,13 @@ function generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHei
   doc.text(splitPayment, margin, noteY);
   noteY += splitPayment.length * 3.5 + 1;
 
+  // Observaciones directamente debajo de Forma de Pago
+  noteY = renderObservationsBelowPayment(doc, notes, margin, noteY, notesWidth);
+
   const warrantyText = contractor.warranty || 'Garantía legal sobre mano de obra ejecutada.';
   const splitWarranty = doc.splitTextToSize(`• Garantía: ${warrantyText}`, notesWidth);
   doc.text(splitWarranty, margin, noteY);
   noteY += splitWarranty.length * 3.5 + 1;
-
-  if (notes) {
-    const customNotes = doc.splitTextToSize(`• Observaciones: ${notes}`, notesWidth);
-    doc.text(customNotes, margin, noteY);
-    noteY += customNotes.length * 3.5 + 1;
-  }
 
   // Exclusions (Lo que NO incluye)
   if (exclusions.length > 0) {
@@ -460,7 +528,10 @@ function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeigh
   const generalSummary = `${totalSpaces} Recinto(s) / Áreas presupuestadas con detalle de partidas y valores acordados`;
   doc.text(generalSummary, margin + 48, currentY + 6.5);
 
-  currentY += metricsBarHeight + 5;
+  currentY += metricsBarHeight + 3.5;
+
+  // Render Modality Banner before room breakdown
+  currentY = renderModalityBanner(doc, client.includesMaterials, margin, currentY, pageWidth - margin * 2);
 
   // Render Table for each room / space
   spaces.forEach((space, index) => {
@@ -553,7 +624,7 @@ function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeigh
   });
 
   const exclusions = budgetData.exclusions || [];
-  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4));
+  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4) + (notes ? 12 : 0));
 
   // Check if we have enough space for totals, terms, exclusions and signature, else add page
   if (currentY > pageHeight - requiredBottomHeight) {
@@ -582,6 +653,9 @@ function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeigh
   doc.text(splitPayment, margin, noteY);
   noteY += splitPayment.length * 3.5 + 1;
 
+  // Observaciones directamente debajo de Forma de Pago
+  noteY = renderObservationsBelowPayment(doc, notes, margin, noteY, notesWidth);
+
   const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';
   const workDaysText = client.estimatedWorkDays ? `${client.estimatedWorkDays} ${workDaysLabel}` : 'A convenir';
   const splitTime = doc.splitTextToSize(`• Plazo de Ejecución: ${workDaysText}`, notesWidth);
@@ -592,12 +666,6 @@ function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeigh
   const splitWarranty = doc.splitTextToSize(`• Garantía: ${warrantyText}`, notesWidth);
   doc.text(splitWarranty, margin, noteY);
   noteY += splitWarranty.length * 3.5 + 1;
-
-  if (notes) {
-    const customNotes = doc.splitTextToSize(`• Observaciones: ${notes}`, notesWidth);
-    doc.text(customNotes, margin, noteY);
-    noteY += customNotes.length * 3.5 + 1;
-  }
 
   // Exclusions (Lo que NO incluye)
   if (exclusions.length > 0) {
@@ -689,6 +757,9 @@ function generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeig
 
   currentY += 10.5;
 
+  // Render Modality Banner before room breakdown
+  currentY = renderModalityBanner(doc, client.includesMaterials, margin, currentY, pageWidth - margin * 2);
+
   // Build the minimalist summary table
   // Each space is a prominent row, with clean bullet points of item titles only
   const tableBody = spaces.map((space, idx) => {
@@ -750,7 +821,7 @@ function generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeig
   currentY = doc.lastAutoTable.finalY + 6;
 
   const exclusions = budgetData.exclusions || [];
-  const requiredMinBottomHeight = Math.max(75, 45 + (exclusions.length * 4.2));
+  const requiredMinBottomHeight = Math.max(75, 45 + (exclusions.length * 4.2) + (notes ? 12 : 0));
 
   // Check if we have enough space for the summary total box, terms & exclusions
   if (currentY > pageHeight - requiredMinBottomHeight) {
@@ -774,27 +845,24 @@ function generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeig
   doc.setTextColor(...DARK_COLOR);
 
   let termY = currentY + 8;
+  const paymentText = contractor.paymentTerms || '50% anticipo al inicio, 30% avance y 20% contra recepción conforme.';
+  const splitPayment = doc.splitTextToSize(`• Forma de Pago: ${paymentText}`, termsWidth);
+  doc.text(splitPayment, margin, termY);
+  termY += splitPayment.length * 3.8 + 1.5;
+
+  // Observaciones directamente debajo de Forma de Pago
+  termY = renderObservationsBelowPayment(doc, notes, margin, termY, termsWidth);
+
   const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';
   const workDaysText = client.estimatedWorkDays ? `${client.estimatedWorkDays} ${workDaysLabel}` : 'A coordinar';
   const splitTime = doc.splitTextToSize(`• Plazo de Ejecución: ${workDaysText}`, termsWidth);
   doc.text(splitTime, margin, termY);
   termY += splitTime.length * 3.8 + 1.5;
 
-  const paymentText = contractor.paymentTerms || '50% anticipo al inicio, 30% avance y 20% contra recepción conforme.';
-  const splitPayment = doc.splitTextToSize(`• Forma de Pago: ${paymentText}`, termsWidth);
-  doc.text(splitPayment, margin, termY);
-  termY += splitPayment.length * 3.8 + 1.5;
-
   const warrantyText = contractor.warranty || 'Garantía legal sobre mano de obra ejecutada.';
   const splitWarranty = doc.splitTextToSize(`• Garantía: ${warrantyText}`, termsWidth);
   doc.text(splitWarranty, margin, termY);
   termY += splitWarranty.length * 3.8 + 1.5;
-
-  if (notes) {
-    const customNotes = doc.splitTextToSize(`• Observaciones: ${notes}`, termsWidth);
-    doc.text(customNotes, margin, termY);
-    termY += customNotes.length * 3.8 + 1.5;
-  }
 
   // Exclusions in Minimalist PDF
   if (exclusions.length > 0) {

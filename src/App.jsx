@@ -91,7 +91,10 @@ export default function App() {
   // Combined full budget object
   const currentBudgetData = useMemo(() => {
     return {
-      client,
+      client: {
+        ...client,
+        includesMaterials: client.includesMaterials !== false
+      },
       spaces,
       exclusions,
       financialSettings,
@@ -108,19 +111,28 @@ export default function App() {
   // Handler to force reload the maestro exact budget
   const handleLoadMaestroBudget = () => {
     if (!RECOVERED_PROJECT) return;
-    setClient({ ...RECOVERED_PROJECT.client });
+    setClient({
+      ...RECOVERED_PROJECT.client,
+      includesMaterials: RECOVERED_PROJECT.client.includesMaterials !== false
+    });
     setSpaces([...RECOVERED_PROJECT.spaces]);
     setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
     setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
     setNotes(RECOVERED_PROJECT.notes || '');
-    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_unified_electric_9180k_v7');
-    localStorage.setItem('pom_current_budget', JSON.stringify(RECOVERED_PROJECT));
-    showToast('¡Presupuesto actualizado: Eléctricos unificados y total exacto $9.180.000!', 'success');
+    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_unified_electric_9180k_v8_materials_obs');
+    localStorage.setItem('pom_current_budget', JSON.stringify({
+      ...RECOVERED_PROJECT,
+      client: {
+        ...RECOVERED_PROJECT.client,
+        includesMaterials: true
+      }
+    }));
+    showToast('¡Presupuesto actualizado: Materiales y Observaciones configurados ($9.180.000)!', 'success');
   };
 
   // Auto-sync exact maestro budget on mount if revision changed
   useEffect(() => {
-    const CURRENT_REV = 'rev_2026_09_28_unified_electric_9180k_v7';
+    const CURRENT_REV = 'rev_2026_09_28_unified_electric_9180k_v8_materials_obs';
     const storedRev = localStorage.getItem('pom_project_revision');
     if (storedRev !== CURRENT_REV && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
       handleLoadMaestroBudget();
@@ -482,6 +494,8 @@ export default function App() {
             <ClientInfoForm
               client={client}
               onChange={setClient}
+              notes={notes}
+              onUpdateNotes={setNotes}
             />
 
             <SpaceList

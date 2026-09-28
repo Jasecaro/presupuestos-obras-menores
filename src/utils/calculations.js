@@ -227,6 +227,8 @@ export function generateWhatsAppSummary(budgetData, contractorData) {
   text += `📅 *Fecha:* ${client.date || new Date().toLocaleDateString('es-CL')}\n`;
   if (client.name) text += `👤 *Cliente:* ${client.name}\n`;
   if (client.address) text += `📍 *Ubicación:* ${client.address} ${client.city ? `(${client.city})` : ''}\n`;
+  const includesMaterials = client.includesMaterials !== false;
+  text += `📦 *Modalidad:* ${includesMaterials ? '✅ Todo Incluido (Mano de obra y materiales incluidos)' : '⚠️ Solo Mano de Obra (No incluye materiales)'}\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   text += `🛠️ *ALCANCE DE TRABAJOS A REALIZAR:*\n`;
@@ -248,11 +250,11 @@ export function generateWhatsAppSummary(budgetData, contractorData) {
   if (contractor.paymentTerms) {
     text += `💳 *Forma de Pago:* ${contractor.paymentTerms}\n`;
   }
-  if (contractor.warranty) {
-    text += `🛡️ *Garantía:* ${contractor.warranty}\n`;
-  }
   if (notes) {
     text += `📝 *Observaciones:* ${notes}\n`;
+  }
+  if (contractor.warranty) {
+    text += `🛡️ *Garantía:* ${contractor.warranty}\n`;
   }
 
   const exclusions = budgetData.exclusions || [];

@@ -418,7 +418,8 @@ export const DEFAULT_CLIENT = {
   date: new Date().toISOString().split('T')[0],
   validityDays: 15,
   estimatedWorkDays: 5,
-  workDaysType: 'hábiles'
+  workDaysType: 'hábiles',
+  includesMaterials: true
 };
 
 export const DEFAULT_EXCLUSIONS = [
