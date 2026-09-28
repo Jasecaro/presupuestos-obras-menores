@@ -125,16 +125,25 @@ export function savePriceCatalog(catalog) {
   }
 }
 
+const CURRENT_PROJECT_REVISION_KEY = 'pom_project_revision';
+const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_maestro_exact_v2';
+
 export function loadCurrentBudget() {
   try {
+    const revision = localStorage.getItem(CURRENT_PROJECT_REVISION_KEY);
+    // If not matching current revision, force load updated RECOVERED_PROJECT
+    if (revision !== CURRENT_PROJECT_REVISION && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
+      localStorage.setItem(STORAGE_KEYS.CURRENT_BUDGET, JSON.stringify(RECOVERED_PROJECT));
+      localStorage.setItem(CURRENT_PROJECT_REVISION_KEY, CURRENT_PROJECT_REVISION);
+      return RECOVERED_PROJECT;
+    }
+
     const data = localStorage.getItem(STORAGE_KEYS.CURRENT_BUDGET);
     if (data) {
       const parsed = JSON.parse(data);
-      // If María Luz Camus Romo is already the active budget, return it
       if (parsed?.client?.name === 'María Luz Camus Romo' && Array.isArray(parsed?.spaces) && parsed.spaces.length > 0) {
         return parsed;
       }
-      // If there was another budget, preserve it in history
       if (parsed && parsed.spaces && parsed.spaces.length > 0 && parsed.client?.name && parsed.client.name !== 'María Luz Camus Romo') {
         saveBudgetToHistory(parsed);
       }
@@ -143,10 +152,11 @@ export function loadCurrentBudget() {
     console.error('Error loading current budget', e);
   }
 
-  // Load María Luz Camus Romo project into current budget
+  // Fallback to RECOVERED_PROJECT
   if (RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces) && RECOVERED_PROJECT.spaces.length > 0) {
     try {
       localStorage.setItem(STORAGE_KEYS.CURRENT_BUDGET, JSON.stringify(RECOVERED_PROJECT));
+      localStorage.setItem(CURRENT_PROJECT_REVISION_KEY, CURRENT_PROJECT_REVISION);
     } catch (e) {}
     return RECOVERED_PROJECT;
   }
@@ -165,17 +175,18 @@ export function saveCurrentBudget(budget) {
 export function getSavedBudgetsList() {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.SAVED_BUDGETS);
-    const list = data ? JSON.parse(data) : [];
+    let list = data ? JSON.parse(data) : [];
 
-    // Ensure the recovered project is accessible in history across all browsers
-    if (RECOVERED_PROJECT && !list.some(b => b.client?.quoteNumber === RECOVERED_PROJECT.client?.quoteNumber)) {
+    // Ensure the recovered project is accessible and up to date in history across all browsers
+    if (RECOVERED_PROJECT) {
+      list = list.filter(b => b.client?.quoteNumber !== RECOVERED_PROJECT.client?.quoteNumber && b.id !== 'recov_maria_luz_camus');
       list.unshift({
         ...RECOVERED_PROJECT,
         id: 'recov_maria_luz_camus',
         savedAt: new Date().toISOString(),
         clientName: RECOVERED_PROJECT.client?.name || 'María Luz Camus Romo',
         quoteNumber: RECOVERED_PROJECT.client?.quoteNumber || 'PTO-2026-078',
-        total: 10425000
+        total: RECOVERED_PROJECT.financials?.grandTotal || 9112500
       });
     }
 
