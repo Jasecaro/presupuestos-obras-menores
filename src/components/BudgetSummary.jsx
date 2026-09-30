@@ -26,6 +26,7 @@ export default function BudgetSummary({
   onSaveBudget,
   onOpenPdfPreview,
   onDownloadPdf,
+  onExportExcel,
   onImportExcelBudget
 }) {
   const excelInputRef = useRef(null);
@@ -231,61 +232,106 @@ export default function BudgetSummary({
             <span>Descargar Versión Detallada</span>
           </button>
 
-          {/* Excel Spreadsheet Download Button */}
-          <a
-            href="/Presupuesto_Maria_Luz_Camus_9180000.xlsx"
-            download="Presupuesto_Maria_Luz_Camus_9180000.xlsx"
-            className="btn btn-secondary"
-            style={{ 
-              width: '100%', 
-              justifyContent: 'center', 
-              background: '#ecfdf5', 
-              borderColor: '#10b981', 
-              color: '#065f46',
-              fontWeight: '700',
-              textDecoration: 'none'
-            }}
-            title="Descargar planilla Excel editable con fórmulas automáticas para cuadrar en $9.180.000"
-          >
-            <FileSpreadsheet size={16} />
-            <span>Descargar Excel con Fórmulas (.xlsx)</span>
-          </a>
+          {/* Control Maestro: Excel Export & Import */}
+          <div style={{
+            marginTop: '0.4rem',
+            padding: '0.75rem',
+            backgroundColor: '#f8fafc',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid #e2e8f0',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <FileSpreadsheet size={16} color="#059669" /> Planillas Excel Maestro
+              </span>
+              <span className="badge" style={{ backgroundColor: '#ecfdf5', color: '#065f46', fontSize: '0.68rem', fontWeight: '700' }}>
+                Con Fórmulas
+              </span>
+            </div>
 
-          {/* Import Edited Excel Button */}
-          {onImportExcelBudget && (
-            <div>
-              <input
-                type="file"
-                ref={excelInputRef}
-                accept=".xlsx,.xls"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) {
-                    onImportExcelBudget(f);
-                  }
-                  e.target.value = '';
-                }}
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem' }}>
               <button
                 type="button"
-                className="btn btn-secondary"
-                onClick={() => excelInputRef.current?.click()}
+                className="btn btn-secondary btn-sm"
+                onClick={() => onExportExcel && onExportExcel('macro')}
                 style={{
-                  width: '100%',
+                  backgroundColor: '#ffffff',
+                  borderColor: '#10b981',
+                  color: '#065f46',
+                  fontWeight: '700',
+                  padding: '0.5rem 0.4rem',
+                  fontSize: '0.74rem',
                   justifyContent: 'center',
-                  backgroundColor: '#f8fafc',
-                  borderColor: '#94a3b8',
-                  color: '#1e293b',
-                  fontWeight: '600'
+                  textAlign: 'center'
                 }}
-                title="Importar la planilla Excel editada por el maestro para cargar los nuevos precios y cantidades"
+                title="Descargar planilla Excel editable agrupada por Especialidades / Tareas Completas con fórmulas automáticas de cuadre"
               >
-                <Upload size={15} color="#2563eb" />
-                <span>Importar Excel Editado (.xlsx)</span>
+                <Briefcase size={14} color="#059669" />
+                <span>Excel Macro-Tareas</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => onExportExcel && onExportExcel('rooms')}
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderColor: '#cbd5e1',
+                  color: '#334155',
+                  fontWeight: '600',
+                  padding: '0.5rem 0.4rem',
+                  fontSize: '0.74rem',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
+                title="Descargar planilla Excel editable detallada por Recintos / Habitaciones"
+              >
+                <FileText size={14} />
+                <span>Excel Recintos</span>
               </button>
             </div>
-          )}
+
+            {/* Import Edited Excel Button */}
+            {onImportExcelBudget && (
+              <div>
+                <input
+                  type="file"
+                  ref={excelInputRef}
+                  accept=".xlsx,.xls"
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) {
+                      onImportExcelBudget(f);
+                    }
+                    e.target.value = '';
+                  }}
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => excelInputRef.current?.click()}
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    backgroundColor: '#eff6ff',
+                    borderColor: '#93c5fd',
+                    color: '#1d4ed8',
+                    fontWeight: '700',
+                    padding: '0.5rem 0.6rem',
+                    fontSize: '0.76rem'
+                  }}
+                  title="Importar la planilla Excel editada por el maestro (detecta automáticamente si es por Tareas Globales o por Recintos)"
+                >
+                  <Upload size={14} color="#2563eb" />
+                  <span>Importar Excel Editado (.xlsx)</span>
+                </button>
+              </div>
+            )}
+          </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <button

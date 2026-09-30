@@ -26,6 +26,7 @@ import {
 import { calculateBudgetFinancials, formatCurrency } from './utils/calculations';
 import { generateBudgetPDF } from './utils/pdfGenerator';
 import { parseBudgetExcel } from './utils/excelImporter';
+import { exportMacroTasksExcel, exportRoomBudgetExcel } from './utils/excelExporter';
 import { DEFAULT_CLIENT, DEFAULT_EXCLUSIONS } from './types/budget';
 import { RECOVERED_PROJECT } from './utils/recoveredProject';
 import { PlusCircle } from 'lucide-react';
@@ -361,6 +362,25 @@ export default function App() {
     }
   };
 
+  const handleExportExcel = async (type = 'macro') => {
+    try {
+      if (spaces.length === 0) {
+        showToast('Agrega al menos un recinto o partida antes de exportar.', 'error');
+        return;
+      }
+      if (type === 'macro') {
+        const fileName = await exportMacroTasksExcel(currentBudgetData, contractor);
+        showToast(`Planilla Excel por Tareas Globales descargada (${fileName})`, 'success');
+      } else {
+        const fileName = await exportRoomBudgetExcel(currentBudgetData, contractor);
+        showToast(`Planilla Excel por Recintos descargada (${fileName})`, 'success');
+      }
+    } catch (err) {
+      console.error('Error exporting Excel:', err);
+      showToast(`Error al exportar Excel: ${err.message || 'Error desconocido'}`, 'error');
+    }
+  };
+
   const handleDeleteBudget = (id) => {
     if (window.confirm('¿Eliminar este presupuesto del historial?')) {
       const updated = deleteBudgetFromHistory(id);
@@ -541,6 +561,7 @@ export default function App() {
               onSaveBudget={handleSaveBudget}
               onOpenPdfPreview={() => handleOpenPdfPreview('medium')}
               onDownloadPdf={handleDirectDownloadPdf}
+              onExportExcel={handleExportExcel}
               onImportExcelBudget={handleImportExcelBudget}
             />
           </div>

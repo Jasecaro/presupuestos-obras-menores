@@ -212,6 +212,75 @@ export function formatNumber(num, decimals = 2) {
   });
 }
 
+export const MACRO_TASKS_DEFINITIONS = [
+  {
+    id: 'macro_pintura_interior',
+    title: 'Pintura y Empastado Interior Integral (Toda la Casa)',
+    shortTitle: 'Pintura Interior Integral',
+    description: 'Preparación de superficies, reparación de fisuras, empaste y aplicación de 2 manos de pintura esmalte al agua en Living, Comedor, Pasillo, Cocina, Baño y los 4 Dormitorios.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      if (n.includes('exterior') || n.includes('alero') || n.includes('humedad en muros')) return false;
+      return n.includes('pintura') || n.includes('empastado') || n.includes('filtración');
+    }
+  },
+  {
+    id: 'macro_exterior',
+    title: 'Tratamiento y Pintura Exterior de Fachada',
+    shortTitle: 'Pintura y Fachada Exterior',
+    description: 'Limpieza, preparación y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad en muros bajos.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      return n.includes('alero exterior') || n.includes('pintura exterior') || n.includes('humedad en muros bajos');
+    }
+  },
+  {
+    id: 'macro_electricidad',
+    title: 'Instalación Eléctrica Integral, Canalizaciones y Puntos de Conexión',
+    shortTitle: 'Instalación Eléctrica Completa',
+    description: 'Renovación y trazado de canalizaciones eléctricas, picado de piso, cableado normalizado SEC, cajas de derivación y montaje de módulos (enchufes, interruptores y centros de luz) en ambos pisos y logia.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      const c = (it.category || '').toLowerCase();
+      return c.includes('eléctric') || n.includes('eléctric') || n.includes('canalización');
+    }
+  },
+  {
+    id: 'macro_pisos',
+    title: 'Renovación de Pisos, Cerámicas y Vitrificado de Parquet',
+    shortTitle: 'Pisos, Cerámicas y Vitrificado',
+    description: 'Retiro de parquet existente en 1er piso, instalación de cerámica en living/comedor (21 m²), pasillo y logia; cerámicas de muro en cocina y baño; piso vinílico; y pulido a máquina con vitrificado de alto tráfico en parquet de 3 dormitorios de 2do piso.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      if (n.includes('receptáculo')) return false;
+      return n.includes('parquet') || n.includes('cerámica') || n.includes('vinílico') || n.includes('vitrificado');
+    }
+  },
+  {
+    id: 'macro_gasfiteria_banos',
+    title: 'Gasfitería Integral, Redes de Agua y Zonas Húmedas de Baños',
+    shortTitle: 'Gasfitería y Baños',
+    description: 'Red completa de agua fría y caliente en tuberías PPR termofusión, retiro de tina existente, construcción e impermeabilización de 2 receptáculos de ducha con cerámica, instalación de WC con fittings y conexiones en logia.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      if (n.includes('ventanal')) return false;
+      const c = (it.category || '').toLowerCase();
+      return c.includes('gasfitería') || n.includes('gasfitería') || n.includes('ppr') || n.includes('wc') || n.includes('tina') || n.includes('receptáculo');
+    }
+  },
+  {
+    id: 'macro_carpinteria_obras',
+    title: 'Carpintería, Ventanal y Obras Civiles Complementarias',
+    shortTitle: 'Carpintería y Obras Civiles',
+    description: 'Reparación de ventanal (vidrios 20x30 y sellado), ajuste y cuadratura de 6 puertas interiores, suministro e instalación de puerta nueva, cambio de cielo en baño, radier de hormigón en logia y retiro de escombros con aseo.',
+    filter: it => {
+      const n = it.name.toLowerCase();
+      const c = (it.category || '').toLowerCase();
+      return c.includes('carpintería') || c.includes('albañilería') || n.includes('puerta') || n.includes('ventanal') || n.includes('radier') || n.includes('escombros') || n.includes('cielo');
+    }
+  }
+];
+
 /**
  * Groups budget items by macro-tasks / global specialties across the entire property
  */
@@ -231,77 +300,8 @@ export function groupItemsByMacroTasks(spaces = []) {
     });
   });
 
-  const macroTasksDefinitions = [
-    {
-      id: 'macro_pintura_interior',
-      title: 'Pintura y Empastado Interior Integral (Toda la Casa)',
-      shortTitle: 'Pintura Interior Integral',
-      description: 'Preparación de superficies, reparación de fisuras, empaste y aplicación de 2 manos de pintura esmalte al agua en Living, Comedor, Pasillo, Cocina, Baño y los 4 Dormitorios.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        if (n.includes('exterior') || n.includes('alero') || n.includes('humedad en muros')) return false;
-        return n.includes('pintura') || n.includes('empastado') || n.includes('filtración');
-      }
-    },
-    {
-      id: 'macro_exterior',
-      title: 'Tratamiento y Pintura Exterior de Fachada',
-      shortTitle: 'Pintura y Fachada Exterior',
-      description: 'Limpieza, preparación y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad en muros bajos.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        return n.includes('alero exterior') || n.includes('pintura exterior') || n.includes('humedad en muros bajos');
-      }
-    },
-    {
-      id: 'macro_electricidad',
-      title: 'Instalación Eléctrica Integral, Canalizaciones y Puntos de Conexión',
-      shortTitle: 'Instalación Eléctrica Completa',
-      description: 'Renovación y trazado de canalizaciones eléctricas, picado de piso, cableado normalizado SEC, cajas de derivación y montaje de módulos (enchufes, interruptores y centros de luz) en ambos pisos y logia.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        const c = (it.category || '').toLowerCase();
-        return c.includes('eléctric') || n.includes('eléctric') || n.includes('canalización');
-      }
-    },
-    {
-      id: 'macro_pisos',
-      title: 'Renovación de Pisos, Cerámicas y Vitrificado de Parquet',
-      shortTitle: 'Pisos, Cerámicas y Vitrificado',
-      description: 'Retiro de parquet existente en 1er piso, instalación de cerámica en living/comedor (21 m²), pasillo y logia; cerámicas de muro en cocina y baño; piso vinílico; y pulido a máquina con vitrificado de alto tráfico en parquet de 3 dormitorios de 2do piso.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        if (n.includes('receptáculo')) return false;
-        return n.includes('parquet') || n.includes('cerámica') || n.includes('vinílico') || n.includes('vitrificado');
-      }
-    },
-    {
-      id: 'macro_gasfiteria_banos',
-      title: 'Gasfitería Integral, Redes de Agua y Zonas Húmedas de Baños',
-      shortTitle: 'Gasfitería y Baños',
-      description: 'Red completa de agua fría y caliente en tuberías PPR termofusión, retiro de tina existente, construcción e impermeabilización de 2 receptáculos de ducha con cerámica, instalación de WC con fittings y conexiones en logia.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        if (n.includes('ventanal')) return false;
-        const c = (it.category || '').toLowerCase();
-        return c.includes('gasfitería') || n.includes('gasfitería') || n.includes('ppr') || n.includes('wc') || n.includes('tina') || n.includes('receptáculo');
-      }
-    },
-    {
-      id: 'macro_carpinteria_obras',
-      title: 'Carpintería, Ventanal y Obras Civiles Complementarias',
-      shortTitle: 'Carpintería y Obras Civiles',
-      description: 'Reparación de ventanal (vidrios 20x30 y sellado), ajuste y cuadratura de 6 puertas interiores, suministro e instalación de puerta nueva, cambio de cielo en baño, radier de hormigón en logia y retiro de escombros con aseo.',
-      filter: it => {
-        const n = it.name.toLowerCase();
-        const c = (it.category || '').toLowerCase();
-        return c.includes('carpintería') || c.includes('albañilería') || n.includes('puerta') || n.includes('ventanal') || n.includes('radier') || n.includes('escombros') || n.includes('cielo');
-      }
-    }
-  ];
-
   const matchedItemIds = new Set();
-  const macroTasks = macroTasksDefinitions.map(def => {
+  const macroTasks = MACRO_TASKS_DEFINITIONS.map(def => {
     const items = allItems.filter(it => {
       if (matchedItemIds.has(it.id)) return false;
       if (def.filter(it)) {

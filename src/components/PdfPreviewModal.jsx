@@ -10,10 +10,12 @@ import {
   Check, 
   ExternalLink,
   Layers,
-  Briefcase
+  Briefcase,
+  FileSpreadsheet
 } from 'lucide-react';
 import { generateBudgetPDF } from '../utils/pdfGenerator';
 import { generateWhatsAppSummary } from '../utils/calculations';
+import { exportMacroTasksExcel, exportRoomBudgetExcel } from '../utils/excelExporter';
 
 export default function PdfPreviewModal({ budgetData, contractorData, initialMode = 'medium', onClose }) {
   const [activeTab, setActiveTab] = useState(initialMode); // 'medium', 'macro', 'minimal', 'detailed', 'whatsapp'
@@ -303,11 +305,35 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
             </button>
             <button
               type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                if (activeTab === 'macro') {
+                  exportMacroTasksExcel(budgetData, contractorData);
+                } else {
+                  exportRoomBudgetExcel(budgetData, contractorData);
+                }
+              }}
+              title="Descargar planilla Excel editable con fórmulas automáticas"
+              style={{ borderColor: '#10b981', color: '#065f46', backgroundColor: '#ecfdf5', fontWeight: '600' }}
+            >
+              <FileSpreadsheet size={16} color="#059669" />
+              <span>{activeTab === 'macro' ? 'Excel Macro-Tareas' : 'Excel Recintos'}</span>
+            </button>
+            <button
+              type="button"
               className="btn btn-primary"
               onClick={() => handleDownload(activeTab === 'whatsapp' ? 'minimal' : activeTab)}
             >
               <Download size={16} />
-              <span>Descargar {activeTab === 'minimal' ? 'PDF Minimalista' : activeTab === 'detailed' ? 'PDF Detallado' : 'PDF'}</span>
+              <span>
+                {activeTab === 'minimal' 
+                  ? 'Descargar PDF Minimalista' 
+                  : activeTab === 'detailed' 
+                  ? 'Descargar PDF Detallado' 
+                  : activeTab === 'macro'
+                  ? 'Descargar PDF Especialidades'
+                  : 'Descargar PDF'}
+              </span>
             </button>
           </div>
         </div>
