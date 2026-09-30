@@ -119,7 +119,7 @@ export default function App() {
     setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
     setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
     setNotes(RECOVERED_PROJECT.notes || '');
-    localStorage.setItem('pom_project_revision', 'rev_2026_09_28_unified_electric_9180k_v8_materials_obs');
+    localStorage.setItem('pom_project_revision', 'rev_2026_09_29_v9_pintura_recintos_unificado_9180k');
     localStorage.setItem('pom_current_budget', JSON.stringify({
       ...RECOVERED_PROJECT,
       client: {
@@ -127,12 +127,12 @@ export default function App() {
         includesMaterials: true
       }
     }));
-    showToast('¡Presupuesto actualizado: Materiales y Observaciones configurados ($9.180.000)!', 'success');
+    showToast('¡Presupuesto actualizado: Pintura en recintos y exterior unificado ($9.180.000)!', 'success');
   };
 
   // Auto-sync exact maestro budget on mount if revision changed
   useEffect(() => {
-    const CURRENT_REV = 'rev_2026_09_28_unified_electric_9180k_v8_materials_obs';
+    const CURRENT_REV = 'rev_2026_09_29_v9_pintura_recintos_unificado_9180k';
     const storedRev = localStorage.getItem('pom_project_revision');
     if (storedRev !== CURRENT_REV && RECOVERED_PROJECT && Array.isArray(RECOVERED_PROJECT.spaces)) {
       handleLoadMaestroBudget();

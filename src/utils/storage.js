@@ -1,5 +1,5 @@
 import { DEFAULT_CONTRACTOR, DEFAULT_CLIENT, DEFAULT_PRICE_CATALOG, DEFAULT_EXCLUSIONS, SPACE_PRESETS } from '../types/budget';
-import { RECOVERED_PROJECT } from './recoveredProject';
+import { RECOVERED_PROJECT, PREVIOUS_RECOVERED_PROJECT } from './recoveredProject';
 import { triggerFileDownload } from './downloader';
 
 const STORAGE_KEYS = {
@@ -127,7 +127,7 @@ export function savePriceCatalog(catalog) {
 }
 
 const CURRENT_PROJECT_REVISION_KEY = 'pom_project_revision';
-const CURRENT_PROJECT_REVISION = 'rev_2026_09_28_unified_electric_9180k_v8_materials_obs';
+const CURRENT_PROJECT_REVISION = 'rev_2026_09_29_v9_pintura_recintos_unificado_9180k';
 
 export function loadCurrentBudget() {
   try {
@@ -178,16 +178,34 @@ export function getSavedBudgetsList() {
     const data = localStorage.getItem(STORAGE_KEYS.SAVED_BUDGETS);
     let list = data ? JSON.parse(data) : [];
 
-    // Ensure the recovered project is accessible and up to date in history across all browsers
+    // Ensure both the updated project V2 and the backup V1 are available in history
     if (RECOVERED_PROJECT) {
-      list = list.filter(b => b.client?.quoteNumber !== RECOVERED_PROJECT.client?.quoteNumber && b.id !== 'recov_maria_luz_camus');
+      list = list.filter(b => 
+        b.id !== 'recov_maria_luz_camus' && 
+        b.id !== 'recov_maria_luz_camus_v2' && 
+        b.id !== 'recov_maria_luz_camus_v1_anterior'
+      );
+
+      // Previous V1 original backup
+      if (PREVIOUS_RECOVERED_PROJECT) {
+        list.unshift({
+          ...PREVIOUS_RECOVERED_PROJECT,
+          id: 'recov_maria_luz_camus_v1_anterior',
+          savedAt: '2026-09-28T14:00:00.000Z',
+          clientName: `${PREVIOUS_RECOVERED_PROJECT.client?.name || 'María Luz Camus Romo'} (Versión 1 Anterior - Respaldo)`,
+          quoteNumber: `${PREVIOUS_RECOVERED_PROJECT.client?.quoteNumber || 'PTO-2026-078'}-V1`,
+          total: PREVIOUS_RECOVERED_PROJECT.financials?.grandTotal || 9180000
+        });
+      }
+
+      // New V2 edited version
       list.unshift({
         ...RECOVERED_PROJECT,
-        id: 'recov_maria_luz_camus',
+        id: 'recov_maria_luz_camus_v2',
         savedAt: new Date().toISOString(),
-        clientName: RECOVERED_PROJECT.client?.name || 'María Luz Camus Romo',
+        clientName: `${RECOVERED_PROJECT.client?.name || 'María Luz Camus Romo'} (Versión 2 - Pintura Recintos y Exterior Unificado)`,
         quoteNumber: RECOVERED_PROJECT.client?.quoteNumber || 'PTO-2026-078',
-        total: RECOVERED_PROJECT.financials?.grandTotal || 9112500
+        total: RECOVERED_PROJECT.financials?.grandTotal || 9180000
       });
     }
 

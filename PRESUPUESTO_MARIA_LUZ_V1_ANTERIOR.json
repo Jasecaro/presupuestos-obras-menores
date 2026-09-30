@@ -26,12 +26,12 @@
       "items": [
         {
           "id": "item_gen_muros_casa",
-          "name": "Empastado y Reparación base de muros y fisuras de la casa",
-          "description": "Preparación y reparación de fisuras y enlucido base en muros de la vivienda",
+          "name": "Empastado y Reparación de todos los muros de la casa (Living + toda la casa)",
+          "description": "Preparación completa de superficies con pasta muro, yeso y lijado profesional",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 340000,
+          "unitPrice": 612000,
           "category": "Pintura y Terminaciones"
         },
         {
@@ -55,13 +55,23 @@
           "category": "Mobiliario, Closets y Carpintería"
         },
         {
-          "id": "item_gen_exterior_alero_humedad",
-          "name": "Pintura exterior (2 pisos), reparación de alero exterior y tratamiento de humedad en muros bajos",
-          "description": "Limpieza y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad con picado, puente adherente e impermeabilización de muros bajos",
+          "id": "item_gen_pintura_exterior",
+          "name": "Pintura exterior de la casa (2 pisos)",
+          "description": "Limpieza, preparación de superficie y aplicación de pintura para intemperie",
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 544000,
+          "unitPrice": 244800,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_gen_humedad_muros_bajos",
+          "name": "Reparación de humedad en muros bajos",
+          "description": "Tratamiento antihumedad, picado, puente adherente e impermeabilización",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 163200,
           "category": "Pintura y Terminaciones"
         },
         {
@@ -73,6 +83,16 @@
           "quantity": 1,
           "unitPrice": 136000,
           "category": "Albañilería y Obras Civiles"
+        },
+        {
+          "id": "item_gen_alero_exterior",
+          "name": "Reparación de alero exterior",
+          "description": "Reparación estructural menor, fijaciones, sellado y pintura de protección",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 272000,
+          "category": "Reparaciones, Mantenciones y Gasfitería"
         }
       ]
     },
@@ -113,7 +133,7 @@
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 652800,
+          "unitPrice": 748000,
           "category": "Pisos y Revestimientos"
         },
         {
@@ -133,18 +153,8 @@
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 285600,
+          "unitPrice": 326400,
           "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_liv_pintura",
-          "name": "Pintura y empastado completo de muros (Pintura incluida)",
-          "description": "Empastado, lijado prolijo y aplicación de 2 manos de pintura esmalte al agua en muros de living y comedor",
-          "unit": "gl",
-          "unitType": "fixed",
-          "quantity": 1,
-          "unitPrice": 380800,
-          "category": "Pintura y Terminaciones"
         }
       ]
     },
@@ -175,7 +185,7 @@
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 190400,
+          "unitPrice": 312800,
           "category": "Pisos y Revestimientos"
         },
         {
@@ -187,16 +197,6 @@
           "quantity": 1,
           "unitPrice": 217600,
           "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_pas_pintura",
-          "name": "Pintura y empastado de muros y cielos (Pintura incluida)",
-          "description": "Preparación de muros, empaste y aplicación de 2 manos de esmalte al agua en pasillo",
-          "unit": "gl",
-          "unitType": "fixed",
-          "quantity": 1,
-          "unitPrice": 108800,
-          "category": "Pintura y Terminaciones"
         }
       ]
     },
@@ -237,18 +237,8 @@
           "unit": "gl",
           "unitType": "fixed",
           "quantity": 1,
-          "unitPrice": 231200,
+          "unitPrice": 299200,
           "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_coc_pintura",
-          "name": "Pintura esmalte al agua en cielos y muros (Pintura incluida)",
-          "description": "Preparación de superficies, tratamiento antihumedad y pintura esmalte al agua en cielos y muros de cocina",
-          "unit": "gl",
-          "unitType": "fixed",
-          "quantity": 1,
-          "unitPrice": 95200,
-          "category": "Pintura y Terminaciones"
         }
       ]
     },
@@ -343,16 +333,6 @@
           "quantity": 1,
           "unitPrice": 95200,
           "category": "Instalaciones Eléctricas"
-        },
-        {
-          "id": "item_dp1_pintura",
-          "name": "Pintura y empastado completo de muros (Pintura incluida)",
-          "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua en dormitorio primer piso",
-          "unit": "gl",
-          "unitType": "fixed",
-          "quantity": 1,
-          "unitPrice": 149600,
-          "category": "Pintura y Terminaciones"
         }
       ]
     },
@@ -633,12 +613,12 @@
         "items": [
           {
             "id": "item_gen_muros_casa",
-            "name": "Empastado y Reparación base de muros y fisuras de la casa",
-            "description": "Preparación y reparación de fisuras y enlucido base en muros de la vivienda",
+            "name": "Empastado y Reparación de todos los muros de la casa (Living + toda la casa)",
+            "description": "Preparación completa de superficies con pasta muro, yeso y lijado profesional",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 340000,
+            "unitPrice": 612000,
             "category": "Pintura y Terminaciones"
           },
           {
@@ -662,13 +642,23 @@
             "category": "Mobiliario, Closets y Carpintería"
           },
           {
-            "id": "item_gen_exterior_alero_humedad",
-            "name": "Pintura exterior (2 pisos), reparación de alero exterior y tratamiento de humedad en muros bajos",
-            "description": "Limpieza y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad con picado, puente adherente e impermeabilización de muros bajos",
+            "id": "item_gen_pintura_exterior",
+            "name": "Pintura exterior de la casa (2 pisos)",
+            "description": "Limpieza, preparación de superficie y aplicación de pintura para intemperie",
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 544000,
+            "unitPrice": 244800,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_gen_humedad_muros_bajos",
+            "name": "Reparación de humedad en muros bajos",
+            "description": "Tratamiento antihumedad, picado, puente adherente e impermeabilización",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 163200,
             "category": "Pintura y Terminaciones"
           },
           {
@@ -680,21 +670,19 @@
             "quantity": 1,
             "unitPrice": 136000,
             "category": "Albañilería y Obras Civiles"
+          },
+          {
+            "id": "item_gen_alero_exterior",
+            "name": "Reparación de alero exterior",
+            "description": "Reparación estructural menor, fijaciones, sellado y pintura de protección",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 272000,
+            "category": "Reparaciones, Mantenciones y Gasfitería"
           }
         ],
-        "metrics": {
-          "floorArea": 9,
-          "perimeter": 12,
-          "skirtingPerimeter": 11.15,
-          "grossWallArea": 28.8,
-          "openingsArea": 3.1,
-          "netWallArea": 25.7,
-          "ceilingArea": 9
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
-        "spaceTotal": 1400800
+        "spaceTotal": 1808800
       },
       {
         "id": "space_living_comedor",
@@ -733,7 +721,7 @@
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 652800,
+            "unitPrice": 748000,
             "category": "Pisos y Revestimientos"
           },
           {
@@ -753,33 +741,11 @@
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 285600,
+            "unitPrice": 326400,
             "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_liv_pintura",
-            "name": "Pintura y empastado completo de muros (Pintura incluida)",
-            "description": "Empastado, lijado prolijo y aplicación de 2 manos de pintura esmalte al agua en muros de living y comedor",
-            "unit": "gl",
-            "unitType": "fixed",
-            "quantity": 1,
-            "unitPrice": 380800,
-            "category": "Pintura y Terminaciones"
           }
         ],
-        "metrics": {
-          "floorArea": 21,
-          "perimeter": 20,
-          "skirtingPerimeter": 19.15,
-          "grossWallArea": 48,
-          "openingsArea": 3.1,
-          "netWallArea": 44.9,
-          "ceilingArea": 21
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
-        "spaceTotal": 1972000
+        "spaceTotal": 1727200
       },
       {
         "id": "space_pasillo",
@@ -808,7 +774,7 @@
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 190400,
+            "unitPrice": 312800,
             "category": "Pisos y Revestimientos"
           },
           {
@@ -820,31 +786,9 @@
             "quantity": 1,
             "unitPrice": 217600,
             "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_pas_pintura",
-            "name": "Pintura y empastado de muros y cielos (Pintura incluida)",
-            "description": "Preparación de muros, empaste y aplicación de 2 manos de esmalte al agua en pasillo",
-            "unit": "gl",
-            "unitType": "fixed",
-            "quantity": 1,
-            "unitPrice": 108800,
-            "category": "Pintura y Terminaciones"
           }
         ],
-        "metrics": {
-          "floorArea": 2,
-          "perimeter": 6,
-          "skirtingPerimeter": 4.3,
-          "grossWallArea": 14.4,
-          "openingsArea": 3.2,
-          "netWallArea": 11.2,
-          "ceilingArea": 2
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
-        "spaceTotal": 598400
+        "spaceTotal": 612000
       },
       {
         "id": "space_cocina",
@@ -883,33 +827,11 @@
             "unit": "gl",
             "unitType": "fixed",
             "quantity": 1,
-            "unitPrice": 231200,
+            "unitPrice": 299200,
             "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_coc_pintura",
-            "name": "Pintura esmalte al agua en cielos y muros (Pintura incluida)",
-            "description": "Preparación de superficies, tratamiento antihumedad y pintura esmalte al agua en cielos y muros de cocina",
-            "unit": "gl",
-            "unitType": "fixed",
-            "quantity": 1,
-            "unitPrice": 95200,
-            "category": "Pintura y Terminaciones"
           }
         ],
-        "metrics": {
-          "floorArea": 3,
-          "perimeter": 7,
-          "skirtingPerimeter": 6.15,
-          "grossWallArea": 16.8,
-          "openingsArea": 3.1,
-          "netWallArea": 13.7,
-          "ceilingArea": 3
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
-        "spaceTotal": 748000
+        "spaceTotal": 720800
       },
       {
         "id": "space_bano_1",
@@ -972,18 +894,6 @@
             "category": "Instalaciones Eléctricas"
           }
         ],
-        "metrics": {
-          "floorArea": 6,
-          "perimeter": 10,
-          "skirtingPerimeter": 9.15,
-          "grossWallArea": 24,
-          "openingsArea": 3.1,
-          "netWallArea": 20.9,
-          "ceilingArea": 6
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 707200
       },
       {
@@ -1015,31 +925,9 @@
             "quantity": 1,
             "unitPrice": 95200,
             "category": "Instalaciones Eléctricas"
-          },
-          {
-            "id": "item_dp1_pintura",
-            "name": "Pintura y empastado completo de muros (Pintura incluida)",
-            "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua en dormitorio primer piso",
-            "unit": "gl",
-            "unitType": "fixed",
-            "quantity": 1,
-            "unitPrice": 149600,
-            "category": "Pintura y Terminaciones"
           }
         ],
-        "metrics": {
-          "floorArea": 4,
-          "perimeter": 8,
-          "skirtingPerimeter": 7.15,
-          "grossWallArea": 19.2,
-          "openingsArea": 3.1,
-          "netWallArea": 16.1,
-          "ceilingArea": 4
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
-        "spaceTotal": 353600
+        "spaceTotal": 204000
       },
       {
         "id": "space_dormitorio_2_piso_1",
@@ -1082,18 +970,6 @@
             "category": "Instalaciones Eléctricas"
           }
         ],
-        "metrics": {
-          "floorArea": 9,
-          "perimeter": 12,
-          "skirtingPerimeter": 11.15,
-          "grossWallArea": 28.8,
-          "openingsArea": 3.1,
-          "netWallArea": 25.7,
-          "ceilingArea": 9
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 726240
       },
       {
@@ -1137,18 +1013,6 @@
             "category": "Instalaciones Eléctricas"
           }
         ],
-        "metrics": {
-          "floorArea": 9,
-          "perimeter": 12,
-          "skirtingPerimeter": 11.15,
-          "grossWallArea": 28.8,
-          "openingsArea": 3.1,
-          "netWallArea": 25.7,
-          "ceilingArea": 9
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 726240
       },
       {
@@ -1192,18 +1056,6 @@
             "category": "Instalaciones Eléctricas"
           }
         ],
-        "metrics": {
-          "floorArea": 9,
-          "perimeter": 12,
-          "skirtingPerimeter": 11.15,
-          "grossWallArea": 28.8,
-          "openingsArea": 3.1,
-          "netWallArea": 25.7,
-          "ceilingArea": 9
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 723520
       },
       {
@@ -1267,18 +1119,6 @@
             "category": "Pisos y Revestimientos"
           }
         ],
-        "metrics": {
-          "floorArea": 6,
-          "perimeter": 10,
-          "skirtingPerimeter": 9.15,
-          "grossWallArea": 24,
-          "openingsArea": 3.1,
-          "netWallArea": 20.9,
-          "ceilingArea": 6
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 680000
       },
       {
@@ -1332,24 +1172,8 @@
             "category": "Instalaciones Eléctricas"
           }
         ],
-        "metrics": {
-          "floorArea": 6,
-          "perimeter": 10,
-          "skirtingPerimeter": 9.15,
-          "grossWallArea": 24,
-          "openingsArea": 3.1,
-          "netWallArea": 20.9,
-          "ceilingArea": 6
-        },
-        "hasFloorWork": false,
-        "hasWallWork": false,
-        "hasCeilingWork": false,
         "spaceTotal": 544000
       }
-    ],
-    "totalFloorArea": 0,
-    "totalNetWallArea": 0,
-    "totalCeilingArea": 0,
-    "totalItemsCount": 45
+    ]
   }
 }

@@ -1,4 +1,5 @@
-export const RECOVERED_PROJECT = {
+// Respaldo de la versión V1 anterior (guardada como copia fiel)
+export const PREVIOUS_RECOVERED_PROJECT = {
   "client": {
     "name": "María Luz Camus Romo",
     "rut": "",
@@ -1175,5 +1176,1362 @@ export const RECOVERED_PROJECT = {
         "spaceTotal": 544000
       }
     ]
+  }
+};
+
+// Versión V2 con Pintura en Living, Pasillo, Cocina y Dormitorio 1er piso, y Exterior Unificado
+export const RECOVERED_PROJECT = {
+  "client": {
+    "name": "María Luz Camus Romo",
+    "rut": "",
+    "phone": "",
+    "email": "",
+    "address": "Miguel Claro 1691 D",
+    "city": "Providencia",
+    "quoteNumber": "PTO-2026-078",
+    "date": "2026-09-21",
+    "validityDays": 15,
+    "estimatedWorkDays": "50",
+    "workDaysType": "corridos",
+    "includesMaterials": true
+  },
+  "spaces": [
+    {
+      "id": "space_general",
+      "name": "GENERAL",
+      "length": 3,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_gen_muros_casa",
+          "name": "Empastado y Reparación base de muros y fisuras de la casa",
+          "description": "Preparación y reparación de fisuras y enlucido base en muros de la vivienda",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 340000,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_gen_filtracion_escala",
+          "name": "Reparación de filtración en escala y pintura",
+          "description": "Sellado, reparación de estuco/yeso y acabado de pintura",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 272000,
+          "category": "Reparaciones, Mantenciones y Gasfitería"
+        },
+        {
+          "id": "item_gen_reparacion_puertas",
+          "name": "Reparación de 6 puertas interiores",
+          "description": "Ajuste de bisagras, cerraduras, rebaje y cuadratura",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 108800,
+          "category": "Mobiliario, Closets y Carpintería"
+        },
+        {
+          "id": "item_gen_exterior_alero_humedad",
+          "name": "Pintura exterior (2 pisos), reparación de alero exterior y tratamiento de humedad en muros bajos",
+          "description": "Limpieza y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad con picado, puente adherente e impermeabilización de muros bajos",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 544000,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_gen_patio_escombros",
+          "name": "Reparación de patio, retiro de escombros y aseo general",
+          "description": "Despeje, limpieza fina, acopio y retiro autorizado de escombros",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 136000,
+          "category": "Albañilería y Obras Civiles"
+        }
+      ]
+    },
+    {
+      "id": "space_living_comedor",
+      "name": "Living / Comedor",
+      "length": 7,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_liv_reparar_ventanal",
+          "name": "Reparación de Ventanal (vidrios 20x30 cm)",
+          "description": "Mano de obra, suministro de vidrios 20x30, sellado con silicona y junquillos",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 299200,
+          "category": "Reparaciones, Mantenciones y Gasfitería"
+        },
+        {
+          "id": "item_liv_retiro_parquet",
+          "name": "Retiro de Parquet existente (21 m²)",
+          "description": "Desmonte cuidadoso de entablado de parquet, despeje y acopio de material",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 204000,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_liv_instalacion_ceramica",
+          "name": "Instalación de Cerámica de Piso (21 m²)",
+          "description": "Incluye adhesivo cerámico bekron, fragüe, nivelación y colocación",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 652800,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_liv_picado_piso_electricidad",
+          "name": "Picado de piso para tuberías y canalización eléctrica",
+          "description": "Ranurado y apertura de trazado para embutir canalizaciones eléctricas subterráneas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 149600,
+          "category": "Instalaciones Eléctricas"
+        },
+        {
+          "id": "item_liv_puntos_electricos",
+          "name": "Puntos eléctricos (6 enchufes + 4 centros de luz), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 285600,
+          "category": "Instalaciones Eléctricas"
+        },
+        {
+          "id": "item_liv_pintura",
+          "name": "Pintura y empastado completo de muros (Pintura incluida)",
+          "description": "Empastado, lijado prolijo y aplicación de 2 manos de pintura esmalte al agua en muros de living y comedor",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 380800,
+          "category": "Pintura y Terminaciones"
+        }
+      ]
+    },
+    {
+      "id": "space_pasillo",
+      "name": "Pasillo",
+      "length": 2,
+      "width": 1,
+      "height": 2.4,
+      "doors": 2,
+      "windows": 0,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_pas_retiro_parquet",
+          "name": "Retiro de Parquet existente",
+          "description": "Desmonte y limpieza de base",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 81600,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_pas_ceramica",
+          "name": "Instalación de Cerámica con materiales incluidos",
+          "description": "Nivelación, adhesivo, fraguado y cerámica para pasillo",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 190400,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_pas_puntos_electricos",
+          "name": "Puntos eléctricos (2 enchufes + 2 centros de luz + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 217600,
+          "category": "Instalaciones Eléctricas"
+        },
+        {
+          "id": "item_pas_pintura",
+          "name": "Pintura y empastado de muros y cielos (Pintura incluida)",
+          "description": "Preparación de muros, empaste y aplicación de 2 manos de esmalte al agua en pasillo",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 108800,
+          "category": "Pintura y Terminaciones"
+        }
+      ]
+    },
+    {
+      "id": "space_cocina",
+      "name": "Cocina",
+      "length": 2,
+      "width": 1.5,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_coc_puerta_nueva",
+          "name": "Suministro e Instalación de Puerta Nueva",
+          "description": "Montaje de hoja, colocación de marco/bisagras y cerradura",
+          "unit": "un",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 190400,
+          "category": "Mobiliario, Closets y Carpintería"
+        },
+        {
+          "id": "item_coc_ceramica_muro",
+          "name": "Instalación de Cerámica en Muros de Cocina",
+          "description": "Revestimiento cerámico de salpicaderos/muros, adhesivo y fragüe",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 231200,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_coc_puntos_electricos",
+          "name": "Puntos eléctricos (2 enchufes + módulo encendido + 1 centro luz), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 231200,
+          "category": "Instalaciones Eléctricas"
+        },
+        {
+          "id": "item_coc_pintura",
+          "name": "Pintura esmalte al agua en cielos y muros (Pintura incluida)",
+          "description": "Preparación de superficies, tratamiento antihumedad y pintura esmalte al agua en cielos y muros de cocina",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 95200,
+          "category": "Pintura y Terminaciones"
+        }
+      ]
+    },
+    {
+      "id": "space_bano_1",
+      "name": "Baño Primer Piso",
+      "length": 2,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_b1_vinilico",
+          "name": "Instalación de Piso Vinílico",
+          "description": "Preparación de base y colocación de piso vinílico resistente a humedad",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 149600,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_b1_receptaculo",
+          "name": "Construcción e Instalación de Cerámica en Receptáculo de ducha",
+          "description": "Impermeabilización previa, pendiente hacia desagüe y revestimiento cerámico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 204000,
+          "category": "Albañilería y Obras Civiles"
+        },
+        {
+          "id": "item_b1_wc",
+          "name": "Cambio y Montaje de WC con fittings",
+          "description": "Desmonte de artefacto antiguo, sello de cera, pernos de anclaje y conexión flexible",
+          "unit": "un",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 122400,
+          "category": "Reparaciones, Mantenciones y Gasfitería"
+        },
+        {
+          "id": "item_b1_pintura",
+          "name": "Pintura Esmalte al Agua en Muros (2 Manos antihumedad)",
+          "description": "Preparación de muros, sellador y esmalte al agua fungicida para baño",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 122400,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_b1_electricidad",
+          "name": "Electricidad de baño (1 enchufe + 1 interruptor + canalizado)",
+          "description": "Puntos eléctricos con protección de humedad y conexión a tierra",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 108800,
+          "category": "Instalaciones Eléctricas"
+        }
+      ]
+    },
+    {
+      "id": "space_dormitorio_1_piso",
+      "name": "Dormitorio Primer Piso",
+      "length": 2,
+      "width": 2,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_dp1_vinilico",
+          "name": "Instalación de Piso Vinílico en pieza",
+          "description": "Nivelación de base y postura de piso vinílico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 108800,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_dp1_electricidad",
+          "name": "Electricidad (2 enchufes + 1 interruptor + 1 centro luz)",
+          "description": "Canalizado, cableado y montaje de placas y módulos",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 95200,
+          "category": "Instalaciones Eléctricas"
+        },
+        {
+          "id": "item_dp1_pintura",
+          "name": "Pintura y empastado completo de muros (Pintura incluida)",
+          "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua en dormitorio primer piso",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 149600,
+          "category": "Pintura y Terminaciones"
+        }
+      ]
+    },
+    {
+      "id": "space_dormitorio_2_piso_1",
+      "name": "Segundo piso Dormitorio 1",
+      "length": 3,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_d2p1_pintura",
+          "name": "Pintura y empastado completo de muros (Pintura incluida)",
+          "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 227120,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_d2p1_vitrificado",
+          "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+          "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 227120,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_d2p1_puntos_electricos",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 272000,
+          "category": "Instalaciones Eléctricas"
+        }
+      ]
+    },
+    {
+      "id": "space_dormitorio_2_piso_2",
+      "name": "Segundo piso Dormitorio 2",
+      "length": 3,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_d2p2_pintura",
+          "name": "Pintura y empastado completo de muros (Pintura incluida)",
+          "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 227120,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_d2p2_vitrificado",
+          "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+          "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 227120,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_d2p2_puntos_electricos",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 272000,
+          "category": "Instalaciones Eléctricas"
+        }
+      ]
+    },
+    {
+      "id": "space_dormitorio_2_piso_3",
+      "name": "Segundo piso Dormitorio 3",
+      "length": 3,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_d2p3_pintura",
+          "name": "Pintura y empastado completo de muros (Pintura incluida)",
+          "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 225760,
+          "category": "Pintura y Terminaciones"
+        },
+        {
+          "id": "item_d2p3_vitrificado",
+          "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+          "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 225760,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_d2p3_puntos_electricos",
+          "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+          "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 272000,
+          "category": "Instalaciones Eléctricas"
+        }
+      ]
+    },
+    {
+      "id": "space_bano_2_piso",
+      "name": "Baño Segundo piso",
+      "length": 2,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_b2_gasfiteria_ppr",
+          "name": "Gasfitería 2do Piso: Red de agua fría y caliente en tuberías PPR",
+          "description": "Trazado, termofusión en tuberías PPR, fittings y llaves de corte",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 244800,
+          "category": "Calefont, Gas y Gasfitería"
+        },
+        {
+          "id": "item_b2_retiro_tina",
+          "name": "Retiro de Tina existente y despeje de zona húmeda",
+          "description": "Desconexión de desagües, desmonte cuidadoso de tina y acopio",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 68000,
+          "category": "Albañilería y Obras Civiles"
+        },
+        {
+          "id": "item_b2_receptaculo",
+          "name": "Construcción e Instalación de Cerámica en Receptáculo de ducha",
+          "description": "Conformación de bordes, impermeabilización y postura de cerámica",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 176800,
+          "category": "Albañilería y Obras Civiles"
+        },
+        {
+          "id": "item_b2_cambio_cielo",
+          "name": "Cambio y Reparación de Cielo en Baño",
+          "description": "Remoción de planchas dañadas, reposición y sellado contra condensación",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 108800,
+          "category": "Mobiliario, Closets y Carpintería"
+        },
+        {
+          "id": "item_b2_ceramica_muro",
+          "name": "Reparación y Revestimiento de Cerámica en Muros",
+          "description": "Reposición y reparación de cerámicas dañadas en sector tina/ducha",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 81600,
+          "category": "Pisos y Revestimientos"
+        }
+      ]
+    },
+    {
+      "id": "space_logia",
+      "name": "Logia",
+      "length": 2,
+      "width": 3,
+      "height": 2.4,
+      "doors": 1,
+      "windows": 1,
+      "customOpeningArea": 0,
+      "items": [
+        {
+          "id": "item_log_radier",
+          "name": "Confección de Radier de Hormigón",
+          "description": "Nivelación de terreno, base estabilizada, malla acma y vaciado de radier",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 176800,
+          "category": "Albañilería y Obras Civiles"
+        },
+        {
+          "id": "item_log_ceramica",
+          "name": "Instalación de Cerámica de piso",
+          "description": "Adhesivo para exteriores/zonas húmedas, fragüe y postura",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 149600,
+          "category": "Pisos y Revestimientos"
+        },
+        {
+          "id": "item_log_gasfiteria",
+          "name": "Instalación de Gasfitería (llave, desagüe y red de agua fría/caliente)",
+          "description": "Puntos de conexión para lavadero o lavadora con llave y sifón desagüe",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 136000,
+          "category": "Calefont, Gas y Gasfitería"
+        },
+        {
+          "id": "item_log_electricidad",
+          "name": "Instalación Eléctrica (centro de luz + enchufe exterior protegido)",
+          "description": "Canalizado con materiales aptos para humedad y centro lumínico",
+          "unit": "gl",
+          "unitType": "fixed",
+          "quantity": 1,
+          "unitPrice": 81600,
+          "category": "Instalaciones Eléctricas"
+        }
+      ]
+    }
+  ],
+  "exclusions": [
+    "Materiales de terminación fina que el cliente elija adquirir por su cuenta (griferías de lujo, artefactos especiales o cerámicas fuera de estándar).",
+    "Modificaciones estructurales no contempladas en esta cotización.",
+    "Trámites de permisos municipales o empalmes de compañías eléctricas/sanitarias."
+  ],
+  "financialSettings": {
+    "overheadPercent": 0,
+    "discountPercent": 0,
+    "applyTax": false,
+    "taxRate": 19
+  },
+  "notes": "Presupuesto integral a todo costo: Incluye mano de obra especializada y materiales básicos según especificaciones acordadas en terreno. 50% de anticipo para ejecución del trabajo y compra de materiales iniciales; saldo contra avances convenidos y recepción conforme.",
+  "financials": {
+    "directCost": 9180000,
+    "overheadPercent": 0,
+    "overheadAmount": 0,
+    "discountPercent": 0,
+    "discountAmount": 0,
+    "netSubtotal": 9180000,
+    "applyTax": false,
+    "taxRate": 19,
+    "taxAmount": 0,
+    "grandTotal": 9180000,
+    "spacesBreakdown": [
+      {
+        "id": "space_general",
+        "name": "GENERAL",
+        "length": 3,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_gen_muros_casa",
+            "name": "Empastado y Reparación base de muros y fisuras de la casa",
+            "description": "Preparación y reparación de fisuras y enlucido base en muros de la vivienda",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 340000,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_gen_filtracion_escala",
+            "name": "Reparación de filtración en escala y pintura",
+            "description": "Sellado, reparación de estuco/yeso y acabado de pintura",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 272000,
+            "category": "Reparaciones, Mantenciones y Gasfitería"
+          },
+          {
+            "id": "item_gen_reparacion_puertas",
+            "name": "Reparación de 6 puertas interiores",
+            "description": "Ajuste de bisagras, cerraduras, rebaje y cuadratura",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 108800,
+            "category": "Mobiliario, Closets y Carpintería"
+          },
+          {
+            "id": "item_gen_exterior_alero_humedad",
+            "name": "Pintura exterior (2 pisos), reparación de alero exterior y tratamiento de humedad en muros bajos",
+            "description": "Limpieza y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad con picado, puente adherente e impermeabilización de muros bajos",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 544000,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_gen_patio_escombros",
+            "name": "Reparación de patio, retiro de escombros y aseo general",
+            "description": "Despeje, limpieza fina, acopio y retiro autorizado de escombros",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 136000,
+            "category": "Albañilería y Obras Civiles"
+          }
+        ],
+        "metrics": {
+          "floorArea": 9,
+          "perimeter": 12,
+          "skirtingPerimeter": 11.15,
+          "grossWallArea": 28.8,
+          "openingsArea": 3.1,
+          "netWallArea": 25.7,
+          "ceilingArea": 9
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 1400800
+      },
+      {
+        "id": "space_living_comedor",
+        "name": "Living / Comedor",
+        "length": 7,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_liv_reparar_ventanal",
+            "name": "Reparación de Ventanal (vidrios 20x30 cm)",
+            "description": "Mano de obra, suministro de vidrios 20x30, sellado con silicona y junquillos",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 299200,
+            "category": "Reparaciones, Mantenciones y Gasfitería"
+          },
+          {
+            "id": "item_liv_retiro_parquet",
+            "name": "Retiro de Parquet existente (21 m²)",
+            "description": "Desmonte cuidadoso de entablado de parquet, despeje y acopio de material",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 204000,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_liv_instalacion_ceramica",
+            "name": "Instalación de Cerámica de Piso (21 m²)",
+            "description": "Incluye adhesivo cerámico bekron, fragüe, nivelación y colocación",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 652800,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_liv_picado_piso_electricidad",
+            "name": "Picado de piso para tuberías y canalización eléctrica",
+            "description": "Ranurado y apertura de trazado para embutir canalizaciones eléctricas subterráneas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 149600,
+            "category": "Instalaciones Eléctricas"
+          },
+          {
+            "id": "item_liv_puntos_electricos",
+            "name": "Puntos eléctricos (6 enchufes + 4 centros de luz), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 285600,
+            "category": "Instalaciones Eléctricas"
+          },
+          {
+            "id": "item_liv_pintura",
+            "name": "Pintura y empastado completo de muros (Pintura incluida)",
+            "description": "Empastado, lijado prolijo y aplicación de 2 manos de pintura esmalte al agua en muros de living y comedor",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 380800,
+            "category": "Pintura y Terminaciones"
+          }
+        ],
+        "metrics": {
+          "floorArea": 21,
+          "perimeter": 20,
+          "skirtingPerimeter": 19.15,
+          "grossWallArea": 48,
+          "openingsArea": 3.1,
+          "netWallArea": 44.9,
+          "ceilingArea": 21
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 1972000
+      },
+      {
+        "id": "space_pasillo",
+        "name": "Pasillo",
+        "length": 2,
+        "width": 1,
+        "height": 2.4,
+        "doors": 2,
+        "windows": 0,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_pas_retiro_parquet",
+            "name": "Retiro de Parquet existente",
+            "description": "Desmonte y limpieza de base",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 81600,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_pas_ceramica",
+            "name": "Instalación de Cerámica con materiales incluidos",
+            "description": "Nivelación, adhesivo, fraguado y cerámica para pasillo",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 190400,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_pas_puntos_electricos",
+            "name": "Puntos eléctricos (2 enchufes + 2 centros de luz + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 217600,
+            "category": "Instalaciones Eléctricas"
+          },
+          {
+            "id": "item_pas_pintura",
+            "name": "Pintura y empastado de muros y cielos (Pintura incluida)",
+            "description": "Preparación de muros, empaste y aplicación de 2 manos de esmalte al agua en pasillo",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 108800,
+            "category": "Pintura y Terminaciones"
+          }
+        ],
+        "metrics": {
+          "floorArea": 2,
+          "perimeter": 6,
+          "skirtingPerimeter": 4.3,
+          "grossWallArea": 14.4,
+          "openingsArea": 3.2,
+          "netWallArea": 11.2,
+          "ceilingArea": 2
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 598400
+      },
+      {
+        "id": "space_cocina",
+        "name": "Cocina",
+        "length": 2,
+        "width": 1.5,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_coc_puerta_nueva",
+            "name": "Suministro e Instalación de Puerta Nueva",
+            "description": "Montaje de hoja, colocación de marco/bisagras y cerradura",
+            "unit": "un",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 190400,
+            "category": "Mobiliario, Closets y Carpintería"
+          },
+          {
+            "id": "item_coc_ceramica_muro",
+            "name": "Instalación de Cerámica en Muros de Cocina",
+            "description": "Revestimiento cerámico de salpicaderos/muros, adhesivo y fragüe",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 231200,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_coc_puntos_electricos",
+            "name": "Puntos eléctricos (2 enchufes + módulo encendido + 1 centro luz), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 231200,
+            "category": "Instalaciones Eléctricas"
+          },
+          {
+            "id": "item_coc_pintura",
+            "name": "Pintura esmalte al agua en cielos y muros (Pintura incluida)",
+            "description": "Preparación de superficies, tratamiento antihumedad y pintura esmalte al agua en cielos y muros de cocina",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 95200,
+            "category": "Pintura y Terminaciones"
+          }
+        ],
+        "metrics": {
+          "floorArea": 3,
+          "perimeter": 7,
+          "skirtingPerimeter": 6.15,
+          "grossWallArea": 16.8,
+          "openingsArea": 3.1,
+          "netWallArea": 13.7,
+          "ceilingArea": 3
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 748000
+      },
+      {
+        "id": "space_bano_1",
+        "name": "Baño Primer Piso",
+        "length": 2,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_b1_vinilico",
+            "name": "Instalación de Piso Vinílico",
+            "description": "Preparación de base y colocación de piso vinílico resistente a humedad",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 149600,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_b1_receptaculo",
+            "name": "Construcción e Instalación de Cerámica en Receptáculo de ducha",
+            "description": "Impermeabilización previa, pendiente hacia desagüe y revestimiento cerámico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 204000,
+            "category": "Albañilería y Obras Civiles"
+          },
+          {
+            "id": "item_b1_wc",
+            "name": "Cambio y Montaje de WC con fittings",
+            "description": "Desmonte de artefacto antiguo, sello de cera, pernos de anclaje y conexión flexible",
+            "unit": "un",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 122400,
+            "category": "Reparaciones, Mantenciones y Gasfitería"
+          },
+          {
+            "id": "item_b1_pintura",
+            "name": "Pintura Esmalte al Agua en Muros (2 Manos antihumedad)",
+            "description": "Preparación de muros, sellador y esmalte al agua fungicida para baño",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 122400,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_b1_electricidad",
+            "name": "Electricidad de baño (1 enchufe + 1 interruptor + canalizado)",
+            "description": "Puntos eléctricos con protección de humedad y conexión a tierra",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 108800,
+            "category": "Instalaciones Eléctricas"
+          }
+        ],
+        "metrics": {
+          "floorArea": 6,
+          "perimeter": 10,
+          "skirtingPerimeter": 9.15,
+          "grossWallArea": 24,
+          "openingsArea": 3.1,
+          "netWallArea": 20.9,
+          "ceilingArea": 6
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 707200
+      },
+      {
+        "id": "space_dormitorio_1_piso",
+        "name": "Dormitorio Primer Piso",
+        "length": 2,
+        "width": 2,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_dp1_vinilico",
+            "name": "Instalación de Piso Vinílico en pieza",
+            "description": "Nivelación de base y postura de piso vinílico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 108800,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_dp1_electricidad",
+            "name": "Electricidad (2 enchufes + 1 interruptor + 1 centro luz)",
+            "description": "Canalizado, cableado y montaje de placas y módulos",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 95200,
+            "category": "Instalaciones Eléctricas"
+          },
+          {
+            "id": "item_dp1_pintura",
+            "name": "Pintura y empastado completo de muros (Pintura incluida)",
+            "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua en dormitorio primer piso",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 149600,
+            "category": "Pintura y Terminaciones"
+          }
+        ],
+        "metrics": {
+          "floorArea": 4,
+          "perimeter": 8,
+          "skirtingPerimeter": 7.15,
+          "grossWallArea": 19.2,
+          "openingsArea": 3.1,
+          "netWallArea": 16.1,
+          "ceilingArea": 4
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 353600
+      },
+      {
+        "id": "space_dormitorio_2_piso_1",
+        "name": "Segundo piso Dormitorio 1",
+        "length": 3,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_d2p1_pintura",
+            "name": "Pintura y empastado completo de muros (Pintura incluida)",
+            "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 227120,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_d2p1_vitrificado",
+            "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+            "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 227120,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_d2p1_puntos_electricos",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 272000,
+            "category": "Instalaciones Eléctricas"
+          }
+        ],
+        "metrics": {
+          "floorArea": 9,
+          "perimeter": 12,
+          "skirtingPerimeter": 11.15,
+          "grossWallArea": 28.8,
+          "openingsArea": 3.1,
+          "netWallArea": 25.7,
+          "ceilingArea": 9
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 726240
+      },
+      {
+        "id": "space_dormitorio_2_piso_2",
+        "name": "Segundo piso Dormitorio 2",
+        "length": 3,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_d2p2_pintura",
+            "name": "Pintura y empastado completo de muros (Pintura incluida)",
+            "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 227120,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_d2p2_vitrificado",
+            "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+            "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 227120,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_d2p2_puntos_electricos",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 272000,
+            "category": "Instalaciones Eléctricas"
+          }
+        ],
+        "metrics": {
+          "floorArea": 9,
+          "perimeter": 12,
+          "skirtingPerimeter": 11.15,
+          "grossWallArea": 28.8,
+          "openingsArea": 3.1,
+          "netWallArea": 25.7,
+          "ceilingArea": 9
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 726240
+      },
+      {
+        "id": "space_dormitorio_2_piso_3",
+        "name": "Segundo piso Dormitorio 3",
+        "length": 3,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_d2p3_pintura",
+            "name": "Pintura y empastado completo de muros (Pintura incluida)",
+            "description": "Empastado integral, lijado y 2 manos de pintura esmalte al agua",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 225760,
+            "category": "Pintura y Terminaciones"
+          },
+          {
+            "id": "item_d2p3_vitrificado",
+            "name": "Pulido y Vitrificado de Parquet (con vitrificante incluido)",
+            "description": "Pulido con máquina en grano fino y medio + aplicación de vitrificante de alto tráfico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 225760,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_d2p3_puntos_electricos",
+            "name": "Electricidad picada nueva: Puntos eléctricos (2 enchufes + 1 interruptor), canalización y cableado de materiales",
+            "description": "Incluye suministro de módulos certificados SEC, canalizaciones, cableado normalizado, cajas de derivación y tapas",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 272000,
+            "category": "Instalaciones Eléctricas"
+          }
+        ],
+        "metrics": {
+          "floorArea": 9,
+          "perimeter": 12,
+          "skirtingPerimeter": 11.15,
+          "grossWallArea": 28.8,
+          "openingsArea": 3.1,
+          "netWallArea": 25.7,
+          "ceilingArea": 9
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 723520
+      },
+      {
+        "id": "space_bano_2_piso",
+        "name": "Baño Segundo piso",
+        "length": 2,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_b2_gasfiteria_ppr",
+            "name": "Gasfitería 2do Piso: Red de agua fría y caliente en tuberías PPR",
+            "description": "Trazado, termofusión en tuberías PPR, fittings y llaves de corte",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 244800,
+            "category": "Calefont, Gas y Gasfitería"
+          },
+          {
+            "id": "item_b2_retiro_tina",
+            "name": "Retiro de Tina existente y despeje de zona húmeda",
+            "description": "Desconexión de desagües, desmonte cuidadoso de tina y acopio",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 68000,
+            "category": "Albañilería y Obras Civiles"
+          },
+          {
+            "id": "item_b2_receptaculo",
+            "name": "Construcción e Instalación de Cerámica en Receptáculo de ducha",
+            "description": "Conformación de bordes, impermeabilización y postura de cerámica",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 176800,
+            "category": "Albañilería y Obras Civiles"
+          },
+          {
+            "id": "item_b2_cambio_cielo",
+            "name": "Cambio y Reparación de Cielo en Baño",
+            "description": "Remoción de planchas dañadas, reposición y sellado contra condensación",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 108800,
+            "category": "Mobiliario, Closets y Carpintería"
+          },
+          {
+            "id": "item_b2_ceramica_muro",
+            "name": "Reparación y Revestimiento de Cerámica en Muros",
+            "description": "Reposición y reparación de cerámicas dañadas en sector tina/ducha",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 81600,
+            "category": "Pisos y Revestimientos"
+          }
+        ],
+        "metrics": {
+          "floorArea": 6,
+          "perimeter": 10,
+          "skirtingPerimeter": 9.15,
+          "grossWallArea": 24,
+          "openingsArea": 3.1,
+          "netWallArea": 20.9,
+          "ceilingArea": 6
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 680000
+      },
+      {
+        "id": "space_logia",
+        "name": "Logia",
+        "length": 2,
+        "width": 3,
+        "height": 2.4,
+        "doors": 1,
+        "windows": 1,
+        "customOpeningArea": 0,
+        "items": [
+          {
+            "id": "item_log_radier",
+            "name": "Confección de Radier de Hormigón",
+            "description": "Nivelación de terreno, base estabilizada, malla acma y vaciado de radier",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 176800,
+            "category": "Albañilería y Obras Civiles"
+          },
+          {
+            "id": "item_log_ceramica",
+            "name": "Instalación de Cerámica de piso",
+            "description": "Adhesivo para exteriores/zonas húmedas, fragüe y postura",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 149600,
+            "category": "Pisos y Revestimientos"
+          },
+          {
+            "id": "item_log_gasfiteria",
+            "name": "Instalación de Gasfitería (llave, desagüe y red de agua fría/caliente)",
+            "description": "Puntos de conexión para lavadero o lavadora con llave y sifón desagüe",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 136000,
+            "category": "Calefont, Gas y Gasfitería"
+          },
+          {
+            "id": "item_log_electricidad",
+            "name": "Instalación Eléctrica (centro de luz + enchufe exterior protegido)",
+            "description": "Canalizado con materiales aptos para humedad y centro lumínico",
+            "unit": "gl",
+            "unitType": "fixed",
+            "quantity": 1,
+            "unitPrice": 81600,
+            "category": "Instalaciones Eléctricas"
+          }
+        ],
+        "metrics": {
+          "floorArea": 6,
+          "perimeter": 10,
+          "skirtingPerimeter": 9.15,
+          "grossWallArea": 24,
+          "openingsArea": 3.1,
+          "netWallArea": 20.9,
+          "ceilingArea": 6
+        },
+        "hasFloorWork": false,
+        "hasWallWork": false,
+        "hasCeilingWork": false,
+        "spaceTotal": 544000
+      }
+    ],
+    "totalFloorArea": 0,
+    "totalNetWallArea": 0,
+    "totalCeilingArea": 0,
+    "totalItemsCount": 45
   }
 };
