@@ -10,7 +10,8 @@ import {
   Info,
   Square,
   Paintbrush,
-  Sparkles
+  Sparkles,
+  FileSpreadsheet
 } from 'lucide-react';
 import { formatCurrency, formatNumber } from '../utils/calculations';
 
@@ -206,6 +207,26 @@ export default function BudgetSummary({
             <Download size={15} />
             <span>Descargar Versión Detallada</span>
           </button>
+
+          {/* Excel Spreadsheet Download Button */}
+          <a
+            href="/Presupuesto_Maria_Luz_Camus_9180000.xlsx"
+            download="Presupuesto_Maria_Luz_Camus_9180000.xlsx"
+            className="btn btn-secondary"
+            style={{ 
+              width: '100%', 
+              justifyContent: 'center', 
+              background: '#ecfdf5', 
+              borderColor: '#10b981', 
+              color: '#065f46',
+              fontWeight: '700',
+              textDecoration: 'none'
+            }}
+            title="Descargar planilla Excel editable con fórmulas automáticas para cuadrar en $9.180.000"
+          >
+            <FileSpreadsheet size={16} />
+            <span>Descargar Excel con Fórmulas (.xlsx)</span>
+          </a>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <button
