@@ -9,13 +9,15 @@ import {
   Copy, 
   Check, 
   ExternalLink,
-  Layers
+  Layers,
+  Briefcase
 } from 'lucide-react';
 import { generateBudgetPDF } from '../utils/pdfGenerator';
 import { generateWhatsAppSummary } from '../utils/calculations';
 
-export default function PdfPreviewModal({ budgetData, contractorData, initialMode = 'minimal', onClose }) {
-  const [activeTab, setActiveTab] = useState(initialMode); // 'minimal', 'detailed', 'whatsapp'
+export default function PdfPreviewModal({ budgetData, contractorData, initialMode = 'medium', onClose }) {
+  const [activeTab, setActiveTab] = useState(initialMode); // 'medium', 'macro', 'minimal', 'detailed', 'whatsapp'
+  const [whatsappFormat, setWhatsappFormat] = useState('macro'); // 'macro' or 'rooms'
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -54,8 +56,8 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
   };
 
   const whatsappText = React.useMemo(() => {
-    return generateWhatsAppSummary(budgetData, contractorData);
-  }, [budgetData, contractorData]);
+    return generateWhatsAppSummary(budgetData, contractorData, whatsappFormat);
+  }, [budgetData, contractorData, whatsappFormat]);
 
   const handleCopyWhatsApp = () => {
     navigator.clipboard.writeText(whatsappText);
@@ -93,6 +95,8 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
                   ? 'Descargar Minimalista (PDF)' 
                   : activeTab === 'detailed' 
                   ? 'Descargar Detallado (PDF)' 
+                  : activeTab === 'macro'
+                  ? 'Descargar Especialidades (PDF)'
                   : 'Descargar Versión Media (PDF)'}
               </span>
             </button>
@@ -114,7 +118,20 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
               <FileText size={16} color={activeTab === 'medium' ? 'var(--primary)' : 'inherit'} />
               <span>Versión Media (Subtotales)</span>
               <span className="badge" style={{ backgroundColor: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', fontSize: '0.68rem', padding: '0.15rem 0.45rem', fontWeight: '700' }}>
-                Recomendada (Sin m² ni P.U.)
+                Por Recintos
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={`tab-btn ${activeTab === 'macro' ? 'active' : ''}`}
+              onClick={() => setActiveTab('macro')}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <Briefcase size={16} color={activeTab === 'macro' ? 'var(--primary)' : 'inherit'} />
+              <span>Por Tareas Globales</span>
+              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#065f46', fontSize: '0.68rem', padding: '0.15rem 0.45rem', fontWeight: '700' }}>
+                Macro-Partidas
               </span>
             </button>
 
@@ -200,6 +217,29 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
                     <span>Abrir en WhatsApp</span>
                   </button>
                 </div>
+              </div>
+
+              {/* Format Selector: Macro-Tasks vs Rooms */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.4rem 0.6rem', background: '#f8fafc', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Estructura del texto:</span>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${whatsappFormat === 'macro' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}
+                  onClick={() => setWhatsappFormat('macro')}
+                >
+                  <Briefcase size={13} />
+                  <span>Por Tareas Globales (Macro-Partidas)</span>
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${whatsappFormat === 'rooms' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}
+                  onClick={() => setWhatsappFormat('rooms')}
+                >
+                  <FileText size={13} />
+                  <span>Por Recintos / Habitaciones</span>
+                </button>
               </div>
 
               <div style={{ flex: 1, minHeight: '300px', position: 'relative' }}>

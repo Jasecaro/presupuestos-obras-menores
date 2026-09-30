@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { formatCurrency, formatNumber, calculateSpaceMetrics, getItemQuantity, calculateItemSubtotal } from './calculations';
+import { formatCurrency, formatNumber, calculateSpaceMetrics, getItemQuantity, calculateItemSubtotal, groupItemsByMacroTasks } from './calculations';
 import { triggerFileDownload } from './downloader';
 
 // Common Colors Palette
@@ -730,6 +730,240 @@ function generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeigh
 }
 
 /**
+ * Generates the Macro-Tasks / Trade-Based PDF (Focuses on high-level specialties across the entire property)
+ */
+function generateMacroTasksPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin) {
+  const { client, spaces = [], financials, notes } = budgetData;
+  const contractor = contractorData || {};
+
+  let currentY = renderHeader(doc, {
+    client,
+    contractor,
+    title: 'PRESUPUESTO POR ESPECIALIDADES',
+    margin,
+    pageWidth
+  });
+
+  // Summary Metrics Bar
+  const metricsBarHeight = 10;
+  doc.setFillColor(238, 242, 255);
+  doc.setDrawColor(199, 210, 254);
+  doc.roundedRect(margin, currentY, pageWidth - (margin * 2), metricsBarHeight, 2, 2, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(...PRIMARY_COLOR);
+
+  const { macroTasks, grandTotal } = groupItemsByMacroTasks(spaces);
+
+  doc.text('Resumen General del Proyecto:', margin + 4, currentY + 6.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...DARK_COLOR);
+
+  const generalSummary = `${macroTasks.length} Macro-Especialidades Integradas para toda la propiedad`;
+  doc.text(generalSummary, margin + 48, currentY + 6.5);
+
+  currentY += metricsBarHeight + 3.5;
+
+  // Render Modality Banner before task breakdown
+  currentY = renderModalityBanner(doc, client.includesMaterials, margin, currentY, pageWidth - margin * 2);
+
+  // Render each macro task
+  macroTasks.forEach((macro, index) => {
+    // Header info: Macro title + Subtotal
+    const taskHeader = [
+      [
+        {
+          content: `${index + 1}. ${macro.title.toUpperCase()}`,
+          styles: { fontStyle: 'bold', fillColor: PRIMARY_COLOR, textColor: [255, 255, 255], fontSize: 8.5 }
+        },
+        {
+          content: `Subtotal Especialidad: ${formatCurrency(macro.subtotal)}`,
+          styles: { halign: 'right', fontStyle: 'bold', fillColor: PRIMARY_COLOR, textColor: [255, 255, 255], fontSize: 8 }
+        }
+      ]
+    ];
+
+    autoTable(doc, {
+      startY: currentY,
+      margin: { left: margin, right: margin },
+      body: taskHeader,
+      theme: 'plain',
+      tableWidth: 'auto',
+      columnStyles: {
+        0: { cellWidth: 120 },
+        1: { cellWidth: 'auto' }
+      },
+      styles: {
+        cellPadding: 2.2
+      }
+    });
+
+    currentY = doc.lastAutoTable.finalY;
+
+    // Body table: Description and detailed bullet items included in this specialty
+    const tableBody = [
+      [
+        '•',
+        { 
+          content: `Alcance General: ${macro.description}`, 
+          styles: { fontStyle: 'italic', textColor: [71, 85, 105], fontSize: 7.5 } 
+        },
+        { content: '', styles: { halign: 'right' } }
+      ]
+    ];
+
+    macro.items.forEach(it => {
+      tableBody.push([
+        ' ',
+        { 
+          content: `• ${it.spaceName}: ${it.name}`, 
+          styles: { fontStyle: 'normal', textColor: DARK_COLOR, fontSize: 7.8 } 
+        },
+        { 
+          content: formatCurrency(it.subtotal), 
+          styles: { halign: 'right', fontStyle: 'bold', textColor: [51, 65, 85], fontSize: 7.8 } 
+        }
+      ]);
+    });
+
+    autoTable(doc, {
+      startY: currentY,
+      margin: { left: margin, right: margin },
+      head: [['', 'Detalle de Partidas y Cobertura Incluida', 'Valor']],
+      body: tableBody,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [51, 65, 85],
+        textColor: [255, 255, 255],
+        fontSize: 7.8,
+        fontStyle: 'bold',
+        cellPadding: 2.0
+      },
+      bodyStyles: {
+        fontSize: 7.8,
+        textColor: DARK_COLOR,
+        cellPadding: 2.0,
+        lineColor: BORDER_COLOR
+      },
+      alternateRowStyles: {
+        fillColor: ACCENT_ROW
+      },
+      columnStyles: {
+        0: { cellWidth: 6, halign: 'center' },
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 34, halign: 'right' }
+      },
+      pageBreak: 'auto'
+    });
+
+    currentY = doc.lastAutoTable.finalY + 4;
+  });
+
+  const exclusions = budgetData.exclusions || [];
+  const requiredBottomHeight = Math.max(75, 45 + (exclusions.length * 4) + (notes ? 12 : 0));
+
+  if (currentY > pageHeight - requiredBottomHeight) {
+    doc.addPage();
+    currentY = margin + 5;
+  }
+
+  // Financials & Totals Box (Right) + Terms (Left)
+  const totalsBoxWidth = 80;
+  const totalsBoxX = pageWidth - margin - totalsBoxWidth;
+  const notesWidth = pageWidth - margin * 2 - totalsBoxWidth - 8;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(...PRIMARY_COLOR);
+  doc.text('CONDICIONES COMERCIALES Y FORMA DE PAGO', margin, currentY + 3);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...DARK_COLOR);
+
+  let noteY = currentY + 7.5;
+  if (contractor.paymentTerms) {
+    const splitPayment = doc.splitTextToSize(`• Forma de pago: ${contractor.paymentTerms}`, notesWidth);
+    doc.text(splitPayment, margin, noteY);
+    noteY += splitPayment.length * 3.8 + 1;
+  }
+
+  const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';
+  const workDaysText = client.estimatedWorkDays ? `${client.estimatedWorkDays} ${workDaysLabel}` : 'A convenir según coordinación en terreno';
+  doc.text(`• Plazo estimado: ${workDaysText}`, margin, noteY);
+  noteY += 4.5;
+
+  if (contractor.warranty) {
+    doc.text(`• Garantía de obra: ${contractor.warranty}`, margin, noteY);
+    noteY += 4.5;
+  }
+
+  if (exclusions.length > 0) {
+    doc.setFont('helvetica', 'bold');
+    doc.text('• No incluye (Exclusiones):', margin, noteY);
+    noteY += 3.8;
+    doc.setFont('helvetica', 'normal');
+    exclusions.forEach(ex => {
+      const splitEx = doc.splitTextToSize(`  - ${ex}`, notesWidth);
+      doc.text(splitEx, margin, noteY);
+      noteY += splitEx.length * 3.4 + 0.5;
+    });
+    noteY += 1;
+  }
+
+  noteY = renderObservationsBelowPayment(doc, notes, margin, noteY, notesWidth);
+
+  // Totals Table on the right
+  const totalsRows = [
+    ['Costo Directo Obras:', formatCurrency(financials?.directCost || grandTotal || 0)]
+  ];
+
+  if (financials?.overheadAmount > 0) {
+    totalsRows.push([`Gastos Generales / Utilidad (${financials.overheadPercent}%):`, formatCurrency(financials.overheadAmount)]);
+  }
+
+  if (financials?.discountAmount > 0) {
+    totalsRows.push([`Descuento Especial (${financials.discountPercent}%):`, `-${formatCurrency(financials.discountAmount)}`]);
+  }
+
+  totalsRows.push(['Subtotal Neto:', formatCurrency(financials?.netSubtotal || grandTotal || 0)]);
+
+  if (financials?.applyTax) {
+    totalsRows.push([`IVA (${financials.taxRate}%):`, formatCurrency(financials.taxAmount)]);
+  }
+
+  totalsRows.push([
+    { content: 'TOTAL PRESUPUESTO:', styles: { fontStyle: 'bold', fontSize: 9, textColor: PRIMARY_COLOR } },
+    { content: formatCurrency(financials?.grandTotal || grandTotal || 0), styles: { fontStyle: 'bold', fontSize: 10, textColor: PRIMARY_COLOR, halign: 'right' } }
+  ]);
+
+  autoTable(doc, {
+    startY: currentY,
+    margin: { left: totalsBoxX, right: margin },
+    body: totalsRows,
+    theme: 'plain',
+    tableWidth: totalsBoxWidth,
+    styles: {
+      cellPadding: 2,
+      fontSize: 8,
+      lineColor: BORDER_COLOR,
+      lineWidth: { bottom: 0.3 },
+      textColor: DARK_COLOR
+    },
+    columnStyles: {
+      0: { cellWidth: 46, halign: 'left' },
+      1: { cellWidth: 34, halign: 'right', fontStyle: 'bold' }
+    }
+  });
+
+  currentY = Math.max(noteY + 6, doc.lastAutoTable.finalY + 8);
+
+  renderSignatures(doc, { contractor, client, currentY, margin, pageWidth, pageHeight });
+  renderFooters(doc, pageWidth, pageHeight, 'Presupuesto por Macro-Especialidades  •  Sistema de Obras Menores');
+}
+
+/**
  * Generates the Minimalist / Summary Budget PDF (Focuses only on Scope of Work and Total)
  */
 function generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin) {
@@ -953,13 +1187,21 @@ export function generateBudgetPDF(budgetData, contractorData, options = { mode: 
     generateMinimalPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
   } else if (mode === 'detailed') {
     generateDetailedPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
+  } else if (mode === 'macro') {
+    generateMacroTasksPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
   } else {
     // Default or 'medium'
     generateMediumPDF(doc, budgetData, contractorData, pageWidth, pageHeight, margin);
   }
 
   if (options.download) {
-    const prefix = mode === 'minimal' ? 'Resumen_Presupuesto' : mode === 'detailed' ? 'Presupuesto_Detallado' : 'Presupuesto_Subtotales';
+    const prefix = mode === 'minimal' 
+      ? 'Resumen_Presupuesto' 
+      : mode === 'detailed' 
+      ? 'Presupuesto_Detallado' 
+      : mode === 'macro'
+      ? 'Presupuesto_Especialidades_Globales'
+      : 'Presupuesto_Subtotales';
     const cleanClient = (client.name || 'Cliente')
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')

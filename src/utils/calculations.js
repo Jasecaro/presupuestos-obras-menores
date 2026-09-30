@@ -213,13 +213,142 @@ export function formatNumber(num, decimals = 2) {
 }
 
 /**
- * Generates an executive WhatsApp text summary of the budget
+ * Groups budget items by macro-tasks / global specialties across the entire property
  */
-export function generateWhatsAppSummary(budgetData, contractorData) {
+export function groupItemsByMacroTasks(spaces = []) {
+  const allItems = [];
+  spaces.forEach(s => {
+    const metrics = calculateSpaceMetrics(s);
+    (s.items || []).forEach(it => {
+      const quantity = getItemQuantity(it, metrics);
+      const subtotal = calculateItemSubtotal(it, metrics);
+      allItems.push({
+        ...it,
+        quantity,
+        subtotal,
+        spaceName: s.name
+      });
+    });
+  });
+
+  const macroTasksDefinitions = [
+    {
+      id: 'macro_pintura_interior',
+      title: 'Pintura y Empastado Interior Integral (Toda la Casa)',
+      shortTitle: 'Pintura Interior Integral',
+      description: 'Preparación de superficies, reparación de fisuras, empaste y aplicación de 2 manos de pintura esmalte al agua en Living, Comedor, Pasillo, Cocina, Baño y los 4 Dormitorios.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        if (n.includes('exterior') || n.includes('alero') || n.includes('humedad en muros')) return false;
+        return n.includes('pintura') || n.includes('empastado') || n.includes('filtración');
+      }
+    },
+    {
+      id: 'macro_exterior',
+      title: 'Tratamiento y Pintura Exterior de Fachada',
+      shortTitle: 'Pintura y Fachada Exterior',
+      description: 'Limpieza, preparación y pintura exterior de fachada (2 pisos), reparación estructural y sellado de alero exterior, y tratamiento antihumedad en muros bajos.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        return n.includes('alero exterior') || n.includes('pintura exterior') || n.includes('humedad en muros bajos');
+      }
+    },
+    {
+      id: 'macro_electricidad',
+      title: 'Instalación Eléctrica Integral, Canalizaciones y Puntos de Conexión',
+      shortTitle: 'Instalación Eléctrica Completa',
+      description: 'Renovación y trazado de canalizaciones eléctricas, picado de piso, cableado normalizado SEC, cajas de derivación y montaje de módulos (enchufes, interruptores y centros de luz) en ambos pisos y logia.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        const c = (it.category || '').toLowerCase();
+        return c.includes('eléctric') || n.includes('eléctric') || n.includes('canalización');
+      }
+    },
+    {
+      id: 'macro_pisos',
+      title: 'Renovación de Pisos, Cerámicas y Vitrificado de Parquet',
+      shortTitle: 'Pisos, Cerámicas y Vitrificado',
+      description: 'Retiro de parquet existente en 1er piso, instalación de cerámica en living/comedor (21 m²), pasillo y logia; cerámicas de muro en cocina y baño; piso vinílico; y pulido a máquina con vitrificado de alto tráfico en parquet de 3 dormitorios de 2do piso.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        if (n.includes('receptáculo')) return false;
+        return n.includes('parquet') || n.includes('cerámica') || n.includes('vinílico') || n.includes('vitrificado');
+      }
+    },
+    {
+      id: 'macro_gasfiteria_banos',
+      title: 'Gasfitería Integral, Redes de Agua y Zonas Húmedas de Baños',
+      shortTitle: 'Gasfitería y Baños',
+      description: 'Red completa de agua fría y caliente en tuberías PPR termofusión, retiro de tina existente, construcción e impermeabilización de 2 receptáculos de ducha con cerámica, instalación de WC con fittings y conexiones en logia.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        if (n.includes('ventanal')) return false;
+        const c = (it.category || '').toLowerCase();
+        return c.includes('gasfitería') || n.includes('gasfitería') || n.includes('ppr') || n.includes('wc') || n.includes('tina') || n.includes('receptáculo');
+      }
+    },
+    {
+      id: 'macro_carpinteria_obras',
+      title: 'Carpintería, Ventanal y Obras Civiles Complementarias',
+      shortTitle: 'Carpintería y Obras Civiles',
+      description: 'Reparación de ventanal (vidrios 20x30 y sellado), ajuste y cuadratura de 6 puertas interiores, suministro e instalación de puerta nueva, cambio de cielo en baño, radier de hormigón en logia y retiro de escombros con aseo.',
+      filter: it => {
+        const n = it.name.toLowerCase();
+        const c = (it.category || '').toLowerCase();
+        return c.includes('carpintería') || c.includes('albañilería') || n.includes('puerta') || n.includes('ventanal') || n.includes('radier') || n.includes('escombros') || n.includes('cielo');
+      }
+    }
+  ];
+
+  const matchedItemIds = new Set();
+  const macroTasks = macroTasksDefinitions.map(def => {
+    const items = allItems.filter(it => {
+      if (matchedItemIds.has(it.id)) return false;
+      if (def.filter(it)) {
+        matchedItemIds.add(it.id);
+        return true;
+      }
+      return false;
+    });
+
+    const subtotal = items.reduce((sum, it) => sum + (it.subtotal || 0), 0);
+    return {
+      id: def.id,
+      title: def.title,
+      shortTitle: def.shortTitle,
+      description: def.description,
+      items,
+      subtotal
+    };
+  });
+
+  // Catch any remaining unclassified items
+  const unclassified = allItems.filter(it => !matchedItemIds.has(it.id));
+  if (unclassified.length > 0) {
+    const last = macroTasks[macroTasks.length - 1];
+    unclassified.forEach(it => {
+      last.items.push(it);
+      last.subtotal += it.subtotal || 0;
+    });
+  }
+
+  const grandTotal = macroTasks.reduce((sum, m) => sum + m.subtotal, 0);
+
+  return {
+    macroTasks,
+    grandTotal
+  };
+}
+
+/**
+ * Generates an executive WhatsApp text summary of the budget (supports 'rooms' or 'macro' view)
+ */
+export function generateWhatsAppSummary(budgetData, contractorData, formatMode = 'rooms') {
   const { client, spaces = [], financials, notes } = budgetData;
   const contractor = contractorData || {};
+  const isMacro = formatMode === 'macro';
 
-  let text = `📋 *RESUMEN DE PRESUPUESTO*\n`;
+  let text = `📋 *RESUMEN DE PRESUPUESTO ${isMacro ? '(POR TAREAS GLOBALES)' : ''}*\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━\n`;
   if (contractor.name) text += `🏢 *${contractor.name}*\n`;
   if (contractor.phone) text += `📞 *Contacto:* ${contractor.phone}\n`;
@@ -231,18 +360,28 @@ export function generateWhatsAppSummary(budgetData, contractorData) {
   text += `📦 *Modalidad:* ${includesMaterials ? '✅ Todo Incluido (Mano de obra y materiales incluidos)' : '⚠️ Solo Mano de Obra (No incluye materiales)'}\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-  text += `🛠️ *ALCANCE DE TRABAJOS A REALIZAR:*\n`;
-  spaces.forEach((space, idx) => {
-    text += `\n🔹 *${idx + 1}. ${space.name.toUpperCase()}*\n`;
-    const items = space.items || [];
-    if (items.length === 0) {
-      text += `  • Trabajos y reparaciones según coordinación en terreno.\n`;
-    } else {
-      items.forEach(item => {
-        text += `  • ${item.name}\n`;
-      });
-    }
-  });
+  if (isMacro) {
+    const { macroTasks } = groupItemsByMacroTasks(spaces);
+    text += `🛠️ *ALCANCE DE TRABAJOS (POR TAREA COMPLETA / ESPECIALIDAD):*\n`;
+    macroTasks.forEach((macro, idx) => {
+      text += `\n📌 *${idx + 1}. ${macro.title.toUpperCase()}*\n`;
+      text += `  ℹ️ _${macro.description}_\n`;
+      text += `  💵 *Subtotal Especialidad:* ${formatCurrency(macro.subtotal)}\n`;
+    });
+  } else {
+    text += `🛠️ *ALCANCE DE TRABAJOS A REALIZAR:*\n`;
+    spaces.forEach((space, idx) => {
+      text += `\n🔹 *${idx + 1}. ${space.name.toUpperCase()}*\n`;
+      const items = space.items || [];
+      if (items.length === 0) {
+        text += `  • Trabajos y reparaciones según coordinación en terreno.\n`;
+      } else {
+        items.forEach(item => {
+          text += `  • ${item.name}\n`;
+        });
+      }
+    });
+  }
 
   text += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
   const workDaysLabel = client.workDaysType === 'corridos' ? 'días corridos' : 'días hábiles';

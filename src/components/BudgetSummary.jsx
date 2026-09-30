@@ -12,7 +12,8 @@ import {
   Paintbrush,
   Sparkles,
   FileSpreadsheet,
-  Upload
+  Upload,
+  Briefcase
 } from 'lucide-react';
 import { formatCurrency, formatNumber } from '../utils/calculations';
 
@@ -185,6 +186,25 @@ export default function BudgetSummary({
           >
             <FileText size={16} />
             <span>Descargar Versión Media (Subtotales)</span>
+          </button>
+
+          {/* Macro-Tasks / Especialidades Globales PDF Download Button */}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => onDownloadPdf('macro')}
+            style={{ 
+              width: '100%', 
+              justifyContent: 'center',
+              backgroundColor: 'rgba(37, 99, 235, 0.07)',
+              borderColor: '#2563eb',
+              color: '#1d4ed8',
+              fontWeight: '700'
+            }}
+            title="Descargar presupuesto agrupado por tarea completa / especialidad (Pintura interior completa, fachada, electricidad, pisos, gasfitería, carpintería)"
+          >
+            <Briefcase size={16} />
+            <span>Descargar PDF (Por Tareas Globales)</span>
           </button>
 
           {/* Minimalist Summary PDF Download Button */}
