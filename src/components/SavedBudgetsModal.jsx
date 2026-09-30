@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { FolderOpen, X, Trash2, Calendar, User, FileText, ArrowRight, Download, Upload, FileJson } from 'lucide-react';
+import { FolderOpen, X, Trash2, Calendar, User, FileText, ArrowRight, Download, Upload, FileJson, FileSpreadsheet } from 'lucide-react';
 import { formatCurrency } from '../utils/calculations';
 import { exportBudgetToJson, exportFullBackup, saveBudgetToHistory } from '../utils/storage';
+import { parseBudgetExcel } from '../utils/excelImporter';
 
 export default function SavedBudgetsModal({ 
   budgets = [], 
@@ -13,10 +14,29 @@ export default function SavedBudgetsModal({
 }) {
   const fileInputRef = useRef(null);
 
-  const handleImportFile = (e) => {
+  const handleImportFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const fileName = file.name.toLowerCase();
+
+    // Check if it is an Excel spreadsheet (.xlsx / .xls)
+    if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      try {
+        const imported = await parseBudgetExcel(file, currentBudget);
+        saveBudgetToHistory(imported);
+        onLoadBudget(imported);
+        alert(`¡Planilla Excel "${file.name}" importada con éxito!\nTotal presupuestado: ${formatCurrency(imported.financials?.grandTotal || 0)}`);
+        onClose();
+      } catch (err) {
+        console.error('Error importing Excel:', err);
+        alert(`Error al importar el archivo Excel: ${err.message || 'Formato no válido'}`);
+      }
+      e.target.value = '';
+      return;
+    }
+
+    // Otherwise handle JSON
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
@@ -60,7 +80,7 @@ export default function SavedBudgetsModal({
             <input
               type="file"
               ref={fileInputRef}
-              accept=".json"
+              accept=".json,.xlsx,.xls"
               style={{ display: 'none' }}
               onChange={handleImportFile}
             />
@@ -69,10 +89,10 @@ export default function SavedBudgetsModal({
               type="button"
               className="btn btn-secondary btn-sm"
               onClick={() => fileInputRef.current?.click()}
-              title="Importar un archivo de presupuesto o respaldo (.json) desde tu computador o pendrive"
+              title="Importar un archivo de presupuesto (.json o planilla Excel .xlsx editada por el maestro)"
             >
               <Upload size={14} />
-              <span>Importar (.json)</span>
+              <span>Importar (.json / .xlsx)</span>
             </button>
 
             <button

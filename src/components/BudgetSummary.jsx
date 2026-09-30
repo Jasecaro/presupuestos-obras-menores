@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { 
   DollarSign, 
   FileText, 
@@ -11,7 +11,8 @@ import {
   Square,
   Paintbrush,
   Sparkles,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Upload
 } from 'lucide-react';
 import { formatCurrency, formatNumber } from '../utils/calculations';
 
@@ -23,8 +24,10 @@ export default function BudgetSummary({
   onUpdateNotes,
   onSaveBudget,
   onOpenPdfPreview,
-  onDownloadPdf
+  onDownloadPdf,
+  onImportExcelBudget
 }) {
+  const excelInputRef = useRef(null);
   const handleSettingChange = (field, value) => {
     onUpdateFinancialSettings({
       ...financialSettings,
@@ -227,6 +230,42 @@ export default function BudgetSummary({
             <FileSpreadsheet size={16} />
             <span>Descargar Excel con Fórmulas (.xlsx)</span>
           </a>
+
+          {/* Import Edited Excel Button */}
+          {onImportExcelBudget && (
+            <div>
+              <input
+                type="file"
+                ref={excelInputRef}
+                accept=".xlsx,.xls"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) {
+                    onImportExcelBudget(f);
+                  }
+                  e.target.value = '';
+                }}
+              />
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => excelInputRef.current?.click()}
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  backgroundColor: '#f8fafc',
+                  borderColor: '#94a3b8',
+                  color: '#1e293b',
+                  fontWeight: '600'
+                }}
+                title="Importar la planilla Excel editada por el maestro para cargar los nuevos precios y cantidades"
+              >
+                <Upload size={15} color="#2563eb" />
+                <span>Importar Excel Editado (.xlsx)</span>
+              </button>
+            </div>
+          )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <button

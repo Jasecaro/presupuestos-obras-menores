@@ -23,8 +23,9 @@ import {
   getCleanStarterBudget,
   saveBudgetAutoBackup
 } from './utils/storage';
-import { calculateBudgetFinancials } from './utils/calculations';
+import { calculateBudgetFinancials, formatCurrency } from './utils/calculations';
 import { generateBudgetPDF } from './utils/pdfGenerator';
+import { parseBudgetExcel } from './utils/excelImporter';
 import { DEFAULT_CLIENT, DEFAULT_EXCLUSIONS } from './types/budget';
 import { RECOVERED_PROJECT } from './utils/recoveredProject';
 import { PlusCircle } from 'lucide-react';
@@ -347,6 +348,19 @@ export default function App() {
     showToast(`Presupuesto "${savedBudget.client?.quoteNumber || ''}" cargado`, 'success');
   };
 
+  const handleImportExcelBudget = async (file) => {
+    try {
+      const importedBudget = await parseBudgetExcel(file, currentBudgetData);
+      handleLoadBudget(importedBudget);
+      saveBudgetToHistory(importedBudget);
+      setSavedBudgets(getSavedBudgetsList());
+      showToast(`¡Planilla Excel importada con éxito! Total: ${formatCurrency(importedBudget.financials?.grandTotal || 0)}`, 'success');
+    } catch (err) {
+      console.error('Error importing Excel:', err);
+      showToast(`Error al importar Excel: ${err.message || 'Formato no reconocido'}`, 'error');
+    }
+  };
+
   const handleDeleteBudget = (id) => {
     if (window.confirm('¿Eliminar este presupuesto del historial?')) {
       const updated = deleteBudgetFromHistory(id);
@@ -527,6 +541,7 @@ export default function App() {
               onSaveBudget={handleSaveBudget}
               onOpenPdfPreview={() => handleOpenPdfPreview('medium')}
               onDownloadPdf={handleDirectDownloadPdf}
+              onImportExcelBudget={handleImportExcelBudget}
             />
           </div>
         </div>
