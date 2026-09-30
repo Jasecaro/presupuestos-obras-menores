@@ -8,6 +8,8 @@ export function triggerFileDownload(blobOrData, fileName, mimeType = 'applicatio
     if (blobOrData instanceof Blob) {
       // Ensure the blob has the expected MIME type
       blob = blobOrData.type === mimeType ? blobOrData : new Blob([blobOrData], { type: mimeType });
+    } else if (blobOrData instanceof ArrayBuffer || ArrayBuffer.isView(blobOrData)) {
+      blob = new Blob([blobOrData], { type: mimeType });
     } else if (typeof blobOrData === 'string') {
       blob = new Blob([blobOrData], { type: mimeType });
     } else {

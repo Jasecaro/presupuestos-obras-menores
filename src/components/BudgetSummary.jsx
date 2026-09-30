@@ -294,6 +294,27 @@ export default function BudgetSummary({
               </button>
             </div>
 
+            {/* Direct static download fallback links */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', padding: '0 0.2rem' }}>
+              <a 
+                href="/Presupuesto_Especialidades_Maria_Luz_Camus_9180000.xlsx" 
+                download="Presupuesto_Especialidades_Maria_Luz_Camus_9180000.xlsx"
+                style={{ color: '#059669', textDecoration: 'underline', fontWeight: '500' }}
+                title="Descarga directa archivo base María Luz Camus"
+              >
+                📥 Enlace directo Macro
+              </a>
+              <span style={{ color: '#cbd5e1' }}>•</span>
+              <a 
+                href="/Presupuesto_Maria_Luz_Camus_9180000.xlsx" 
+                download="Presupuesto_Maria_Luz_Camus_9180000.xlsx"
+                style={{ color: '#2563eb', textDecoration: 'underline', fontWeight: '500' }}
+                title="Descarga directa archivo base María Luz Camus"
+              >
+                📥 Enlace directo Recintos
+              </a>
+            </div>
+
             {/* Import Edited Excel Button */}
             {onImportExcelBudget && (
               <div>

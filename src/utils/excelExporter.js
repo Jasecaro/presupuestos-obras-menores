@@ -266,11 +266,19 @@ export async function exportMacroTasksExcel(budgetData, contractorData = {}) {
   });
 
   const buffer = await workbook.xlsx.writeBuffer();
-  const safeClient = (budgetData.client?.name || 'Cliente').replace(/[^a-zA-Z0-9]/g, '_');
-  const fileName = `Presupuesto_Especialidades_${safeClient}_${targetBudget}.xlsx`;
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
+  const cleanClient = (budgetData.client?.name || 'Cliente')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '');
+  const fileName = `Presupuesto_Especialidades_${cleanClient}_${targetBudget}.xlsx`;
 
   triggerFileDownload(
-    buffer, 
+    blob, 
     fileName, 
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   );
@@ -494,11 +502,19 @@ export async function exportRoomBudgetExcel(budgetData, contractorData = {}) {
   };
 
   const buffer = await workbook.xlsx.writeBuffer();
-  const safeClient = (budgetData.client?.name || 'Cliente').replace(/[^a-zA-Z0-9]/g, '_');
-  const fileName = `Presupuesto_Recintos_${safeClient}_${targetBudget}.xlsx`;
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
+  const cleanClient = (budgetData.client?.name || 'Cliente')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '');
+  const fileName = `Presupuesto_Recintos_${cleanClient}_${targetBudget}.xlsx`;
 
   triggerFileDownload(
-    buffer, 
+    blob, 
     fileName, 
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   );
