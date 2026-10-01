@@ -11,18 +11,57 @@ import {
   ExternalLink,
   Layers,
   Briefcase,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Edit3,
+  RotateCcw
 } from 'lucide-react';
 import { generateBudgetPDF } from '../utils/pdfGenerator';
-import { generateWhatsAppSummary } from '../utils/calculations';
+import { generateWhatsAppSummary, MACRO_TASKS_DEFINITIONS } from '../utils/calculations';
 import { exportMacroTasksExcel, exportRoomBudgetExcel } from '../utils/excelExporter';
 
-export default function PdfPreviewModal({ budgetData, contractorData, initialMode = 'medium', onClose }) {
+export default function PdfPreviewModal({ budgetData, contractorData, initialMode = 'medium', onUpdateMacroDescriptions, onClose }) {
   const [activeTab, setActiveTab] = useState(initialMode); // 'medium', 'macro', 'minimal', 'detailed', 'whatsapp'
   const [whatsappFormat, setWhatsappFormat] = useState('macro'); // 'macro' or 'rooms'
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  // Editable Macro Descriptions state
+  const [showMacroEditor, setShowMacroEditor] = useState(false);
+  const [tempDescriptions, setTempDescriptions] = useState(() => budgetData?.macroDescriptions || {});
+  const [savedDescriptionsFeedback, setSavedDescriptionsFeedback] = useState(false);
+
+  useEffect(() => {
+    setTempDescriptions(budgetData?.macroDescriptions || {});
+  }, [budgetData?.macroDescriptions]);
+
+  const handleDescriptionChange = (id, val) => {
+    setTempDescriptions(prev => ({
+      ...prev,
+      [id]: val
+    }));
+  };
+
+  const handleSaveDescriptions = () => {
+    if (onUpdateMacroDescriptions) {
+      onUpdateMacroDescriptions(tempDescriptions);
+    }
+    setSavedDescriptionsFeedback(true);
+    setTimeout(() => setSavedDescriptionsFeedback(false), 2200);
+  };
+
+  const handleResetDescriptions = () => {
+    const defaults = {};
+    MACRO_TASKS_DEFINITIONS.forEach(def => {
+      defaults[def.id] = def.description;
+    });
+    setTempDescriptions(defaults);
+    if (onUpdateMacroDescriptions) {
+      onUpdateMacroDescriptions(defaults);
+    }
+    setSavedDescriptionsFeedback(true);
+    setTimeout(() => setSavedDescriptionsFeedback(false), 2200);
+  };
 
   // Generate PDF preview when tab is minimal or detailed
   useEffect(() => {
@@ -266,21 +305,114 @@ export default function PdfPreviewModal({ budgetData, contractorData, initialMod
                 />
               </div>
             </div>
-          ) : loading ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-              <Loader2 className="spin" size={24} />
-              <span>Generando vista previa del documento...</span>
-            </div>
-          ) : pdfUrl ? (
-            <iframe
-              src={pdfUrl}
-              title="Vista previa PDF"
-              className="pdf-preview-container"
-              style={{ width: '100%', height: '100%', minHeight: '65vh' }}
-            />
           ) : (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--danger)' }}>
-              Ocurrió un error al preparar la vista previa del PDF.
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '0.5rem' }}>
+              {activeTab === 'macro' && (
+                <div style={{
+                  border: '1px solid var(--border-color)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-card)',
+                  overflow: 'hidden',
+                  flexShrink: 0
+                }}>
+                  <div
+                    onClick={() => setShowMacroEditor(!showMacroEditor)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.55rem 0.85rem',
+                      background: showMacroEditor ? '#eff6ff' : '#f8fafc',
+                      cursor: 'pointer',
+                      borderBottom: showMacroEditor ? '1px solid #bfdbfe' : 'none',
+                      transition: 'background 0.2s ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Edit3 size={15} color="var(--primary)" />
+                      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                        Editar "Alcance General" (letra chica) de las especialidades
+                      </span>
+                      {savedDescriptionsFeedback && (
+                        <span style={{ fontSize: '0.74rem', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                          <Check size={13} /> ¡Actualizado!
+                        </span>
+                      )}
+                    </div>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 600 }}>
+                      {showMacroEditor ? '▲ Ocultar editor' : '▼ Modificar textos aquí'}
+                    </span>
+                  </div>
+
+                  {showMacroEditor && (
+                    <div style={{ padding: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '38vh', overflowY: 'auto', background: '#ffffff' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', background: '#f1f5f9', padding: '0.45rem 0.75rem', borderRadius: '4px' }}>
+                        💡 <strong>Nota:</strong> Los cambios que guardes aquí se aplican al PDF, al texto de WhatsApp y al Excel. También puedes editarlos en la <strong>Columna C</strong> del archivo Excel e importarlo.
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                        {MACRO_TASKS_DEFINITIONS.map((def, idx) => {
+                          const currentDesc = tempDescriptions[def.id] !== undefined ? tempDescriptions[def.id] : (budgetData?.macroDescriptions?.[def.id] ?? def.description);
+                          return (
+                            <div key={def.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                              <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#1e293b' }}>
+                                {idx + 1}. {def.shortTitle || def.title}
+                              </label>
+                              <textarea
+                                className="form-textarea"
+                                rows={2}
+                                style={{ fontSize: '0.75rem', lineHeight: '1.35', padding: '0.4rem', border: '1px solid #cbd5e1' }}
+                                value={currentDesc}
+                                onChange={(e) => handleDescriptionChange(def.id, e.target.value)}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', paddingTop: '0.25rem', borderTop: '1px solid #e2e8f0' }}>
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={handleResetDescriptions}
+                          style={{ fontSize: '0.75rem' }}
+                          title="Restaurar textos predeterminados"
+                        >
+                          <RotateCcw size={13} />
+                          <span>Restaurar originales</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={handleSaveDescriptions}
+                          style={{ fontSize: '0.75rem' }}
+                        >
+                          <Check size={14} />
+                          <span>Guardar y actualizar informe</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div style={{ flex: 1, minHeight: '55vh', position: 'relative' }}>
+                {loading ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '0.5rem', color: 'var(--text-secondary)' }}>
+                    <Loader2 className="spin" size={24} />
+                    <span>Generando vista previa del documento...</span>
+                  </div>
+                ) : pdfUrl ? (
+                  <iframe
+                    src={pdfUrl}
+                    title="Vista previa PDF"
+                    className="pdf-preview-container"
+                    style={{ width: '100%', height: '100%', minHeight: showMacroEditor ? '42vh' : '65vh' }}
+                  />
+                ) : (
+                  <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--danger)' }}>
+                    Ocurrió un error al preparar la vista previa del PDF.
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

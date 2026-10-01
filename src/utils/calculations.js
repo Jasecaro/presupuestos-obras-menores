@@ -284,7 +284,7 @@ export const MACRO_TASKS_DEFINITIONS = [
 /**
  * Groups budget items by macro-tasks / global specialties across the entire property
  */
-export function groupItemsByMacroTasks(spaces = []) {
+export function groupItemsByMacroTasks(spaces = [], customDescriptions = {}) {
   const allItems = [];
   spaces.forEach(s => {
     const metrics = calculateSpaceMetrics(s);
@@ -316,7 +316,7 @@ export function groupItemsByMacroTasks(spaces = []) {
       id: def.id,
       title: def.title,
       shortTitle: def.shortTitle,
-      description: def.description,
+      description: (customDescriptions && customDescriptions[def.id]) || def.description,
       items,
       subtotal
     };
@@ -344,7 +344,7 @@ export function groupItemsByMacroTasks(spaces = []) {
  * Generates an executive WhatsApp text summary of the budget (supports 'rooms' or 'macro' view)
  */
 export function generateWhatsAppSummary(budgetData, contractorData, formatMode = 'rooms') {
-  const { client, spaces = [], financials, notes } = budgetData;
+  const { client, spaces = [], financials, notes, macroDescriptions = {} } = budgetData;
   const contractor = contractorData || {};
   const isMacro = formatMode === 'macro';
 
@@ -361,7 +361,7 @@ export function generateWhatsAppSummary(budgetData, contractorData, formatMode =
   text += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   if (isMacro) {
-    const { macroTasks } = groupItemsByMacroTasks(spaces);
+    const { macroTasks } = groupItemsByMacroTasks(spaces, macroDescriptions);
     text += `🛠️ *ALCANCE DE TRABAJOS (POR TAREA COMPLETA / ESPECIALIDAD):*\n`;
     macroTasks.forEach((macro, idx) => {
       text += `\n📌 *${idx + 1}. ${macro.title.toUpperCase()}*\n`;

@@ -126,6 +126,7 @@ function parseMacroBudgetExcel(macroSheet, fallbackBudget) {
 
     const colA = row.getCell(1).value;
     const colB = extractStringValue(row.getCell(2).value);
+    const colC = extractStringValue(row.getCell(3).value);
     const colE = row.getCell(5).value;
     const colF = row.getCell(6).value;
     const colG = row.getCell(7).value;
@@ -141,6 +142,7 @@ function parseMacroBudgetExcel(macroSheet, fallbackBudget) {
       macroRows.push({
         num,
         title: colB,
+        description: colC,
         val: Math.round(val)
       });
     }
@@ -152,6 +154,14 @@ function parseMacroBudgetExcel(macroSheet, fallbackBudget) {
 
   // Extract new macro values in order (0 to 5)
   const macroNewValues = macroRows.map(r => r.val);
+
+  // Extract custom macro descriptions from Col C if provided
+  const macroDescriptions = { ...(fallbackBudget.macroDescriptions || {}) };
+  macroRows.forEach((r, idx) => {
+    if (r.description && MACRO_TASKS_DEFINITIONS[idx]) {
+      macroDescriptions[MACRO_TASKS_DEFINITIONS[idx].id] = r.description;
+    }
+  });
 
   const updatedSpaces = scaleMacroItems(fallbackBudget.spaces || [], macroNewValues);
 
@@ -173,7 +183,8 @@ function parseMacroBudgetExcel(macroSheet, fallbackBudget) {
     spaces: updatedSpaces,
     financialSettings,
     financials,
-    notes: fallbackBudget.notes || ''
+    notes: fallbackBudget.notes || '',
+    macroDescriptions
   };
 }
 

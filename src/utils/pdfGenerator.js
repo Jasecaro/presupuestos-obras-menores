@@ -754,7 +754,7 @@ function generateMacroTasksPDF(doc, budgetData, contractorData, pageWidth, pageH
   doc.setFontSize(8);
   doc.setTextColor(...PRIMARY_COLOR);
 
-  const { macroTasks, grandTotal } = groupItemsByMacroTasks(spaces);
+  const { macroTasks, grandTotal } = groupItemsByMacroTasks(spaces, budgetData.macroDescriptions);
 
   doc.text('Resumen General del Proyecto:', margin + 4, currentY + 6.5);
   doc.setFont('helvetica', 'normal');

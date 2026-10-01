@@ -47,6 +47,7 @@ export default function App() {
     }
   );
   const [notes, setNotes] = useState(initialBudget.notes || '');
+  const [macroDescriptions, setMacroDescriptions] = useState(initialBudget.macroDescriptions || {});
 
   // Persistent Global Settings
   const [contractor, setContractor] = useState(() => loadContractorProfile());
@@ -101,9 +102,10 @@ export default function App() {
       exclusions,
       financialSettings,
       financials,
-      notes
+      notes,
+      macroDescriptions
     };
-  }, [client, spaces, exclusions, financialSettings, financials, notes]);
+  }, [client, spaces, exclusions, financialSettings, financials, notes, macroDescriptions]);
 
   // Auto-save draft on changes
   useEffect(() => {
@@ -121,6 +123,7 @@ export default function App() {
     setExclusions([...(RECOVERED_PROJECT.exclusions || [])]);
     setFinancialSettings({ ...RECOVERED_PROJECT.financialSettings });
     setNotes(RECOVERED_PROJECT.notes || '');
+    setMacroDescriptions(RECOVERED_PROJECT.macroDescriptions || {});
     localStorage.setItem('pom_project_revision', 'rev_2026_09_29_v9_pintura_recintos_unificado_9180k');
     localStorage.setItem('pom_current_budget', JSON.stringify({
       ...RECOVERED_PROJECT,
@@ -325,6 +328,7 @@ export default function App() {
     setExclusions(fresh.exclusions || DEFAULT_EXCLUSIONS);
     setFinancialSettings(fresh.financialSettings);
     setNotes(fresh.notes);
+    setMacroDescriptions({});
     setShowNewBudgetModal(false);
     showToast('Nuevo presupuesto en blanco iniciado', 'info');
   };
@@ -346,6 +350,7 @@ export default function App() {
       taxRate: 19
     });
     setNotes(savedBudget.notes || '');
+    setMacroDescriptions(savedBudget.macroDescriptions || {});
     showToast(`Presupuesto "${savedBudget.client?.quoteNumber || ''}" cargado`, 'success');
   };
 
@@ -601,6 +606,7 @@ export default function App() {
           budgetData={currentBudgetData}
           contractorData={contractor}
           initialMode={pdfPreviewMode}
+          onUpdateMacroDescriptions={(newDescriptions) => setMacroDescriptions(newDescriptions)}
           onClose={() => setShowPdfPreviewModal(false)}
         />
       )}

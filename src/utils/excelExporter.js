@@ -20,7 +20,7 @@ export async function exportMacroTasksExcel(budgetData, contractorData = {}) {
   workbook.created = new Date();
 
   const spaces = budgetData.spaces || [];
-  const { macroTasks, grandTotal } = groupItemsByMacroTasks(spaces);
+  const { macroTasks, grandTotal } = groupItemsByMacroTasks(spaces, budgetData.macroDescriptions);
   const targetBudget = budgetData.financials?.grandTotal || grandTotal || 9180000;
 
   // ==========================================
